@@ -25,7 +25,6 @@ import javax.vecmath.Vector3f;
 import sun.applet.Main;
 
 /**
- *
  * @author Heitor Paceli Maranhao
  */
 public class InsertionBinaryTree {
