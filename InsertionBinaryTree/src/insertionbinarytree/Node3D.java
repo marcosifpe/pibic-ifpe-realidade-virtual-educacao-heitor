@@ -1,6 +1,9 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package insertionbinarytree;
 
-import com.sun.j3d.utils.geometry.Box;
 import java.util.ArrayList;
 import javax.media.j3d.Text3D;
 import javax.media.j3d.Transform3D;
@@ -20,9 +23,72 @@ public class Node3D {
     private Text3D text3d;
     private boolean autoUpdateText = false;
     private TransformGroup LEFT_LEAF, RIGHT_LEAF;
+    private TransformGroup R_CON[], L_CON[];
+    private Transform3D R_CON_TF[], L_CON_TF[];
     private Node3D parent;
+    private Transform3D tfHide;
 
     public Node3D() {
+        R_CON = new TransformGroup[InsertionBinaryTree.H_MAX];
+        L_CON = new TransformGroup[InsertionBinaryTree.H_MAX];
+        L_CON_TF = new Transform3D[InsertionBinaryTree.H_MAX];
+        R_CON_TF = new Transform3D[InsertionBinaryTree.H_MAX];
+        tfHide = new Transform3D();
+        tfHide.setTranslation(new Vector3f(999, 999, 999));
+    }
+
+    public void addRCon(int index, TransformGroup tg) {
+        R_CON[index] = tg;
+    }
+
+    public void addLCon(int index, TransformGroup tg) {
+        L_CON[index] = tg;
+    }
+
+    public void addRConTf(int index, Transform3D tf) {
+        R_CON_TF[index] = tf;
+    }
+
+    public void addLConTf(int index, Transform3D tf) {
+        L_CON_TF[index] = tf;
+    }
+
+    public TransformGroup[] getL_CON() {
+        return L_CON;
+    }
+
+    public TransformGroup[] getR_CON() {
+        return R_CON;
+    }
+
+    public void showRConnection(int i) {
+        if (i >= 0 && i < R_CON.length) {
+            R_CON[i].setTransform(R_CON_TF[i]);
+        }
+    }
+
+    public void showLConnection(int i) {
+        if (i >= 0 && i < L_CON.length) {
+            L_CON[i].setTransform(L_CON_TF[i]);
+        }
+    }
+    
+    public void hideLConnection(){
+        for(TransformGroup t : L_CON){
+            t.setTransform(tfHide);
+        }
+    }
+    
+    public void hideRConnection(){
+        for(TransformGroup t : R_CON){
+            t.setTransform(tfHide);
+        }
+    }
+
+    private Vector3d getCoordinate() {
+        Vector3d v = new Vector3d();
+        getTfNode().get(v);
+        return v;
     }
 
     public Node3D getParent() {
@@ -229,7 +295,7 @@ public class Node3D {
 
                 hideNode(this);
                 InsertionBinaryTree.nodes.add(this);
-                
+
                 //Chama o método para inserir
                 InsertionBinaryTree.reinsert(nodes);
             }
@@ -325,5 +391,4 @@ public class Node3D {
 
         this.getTgNode().setTransform(tf);
     }
-
 }
