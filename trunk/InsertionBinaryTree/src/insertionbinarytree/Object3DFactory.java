@@ -25,7 +25,6 @@ public class Object3DFactory {
     private static Object3DFactory instance;
     private static float leafSize = 0.03f;
     public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r * -7, zInitial = 0.0f;
-
     private float highlighterH = 0.1f;
     private float highlighterR = InsertionBinaryTree.r + 0.02f;
 
@@ -135,12 +134,12 @@ public class Object3DFactory {
 
     public static void calculateConnections(Node3D node) {
         //float d = distance/5/dist;
-        
+
         float distance = InsertionBinaryTree.DISTANCE / 5;
-        for (int i =0; i < InsertionBinaryTree.H_MAX; i++) {
+        for (int i = 0; i < InsertionBinaryTree.H_MAX; i++) {
             float x = 0, y = yInitial;
             float cont = 0.0f;
-            float d = InsertionBinaryTree.DISTANCE / 5/distance;
+            float d = InsertionBinaryTree.DISTANCE / 5 / distance;
             while (true) {
                 //testa se chegou a posicao certa
                 if (cont >= (4 * InsertionBinaryTree.r)) {
@@ -153,81 +152,83 @@ public class Object3DFactory {
             }
             double hypot = Math.hypot(y, x);
             double angle = Math.atan2(y, x);
-            if(i == 0){
+            if (i == 0) {
                 angle += Math.toRadians(260);
-            } else if(i == 1){
+            } else if (i == 1) {
                 angle += Math.toRadians(250);
-            } else{
-                angle+=Math.toRadians(240);
-                hypot+=0.1f;
+            } else {
+                angle += Math.toRadians(240);
+                hypot += 0.1f;
             }
-            
-            
+
+
             //hypot/=2;
             TransformGroup right = createNodeConnection(hypot, angle, false);
             TransformGroup left = createNodeConnection(hypot, angle, true);
-            
+
             Transform3D tfL = new Transform3D();
             left.getTransform(tfL);
             Transform3D tfR = new Transform3D();
             right.getTransform(tfR);
-            
+
             node.addLCon(i, left);
             node.addLConTf(i, tfL);
             node.addRCon(i, right);
             node.addRConTf(i, tfR);
-            
-            
+
+
             Transform3D tfHide = new Transform3D();
-            tfHide.setTranslation(new Vector3f(999, 999,999));
+            tfHide.setTranslation(new Vector3f(999, 999, 999));
             left.setTransform(tfHide);
             right.setTransform(tfHide);
-            
-                        
+
+
             node.getTgNode().addChild(left);
             node.getTgNode().addChild(right);
-            
+
             //node.hideLConnection();
             //node.hideRConnection();
-            
-            System.out.println("x = " + x + " y = "+y);
-            distance/=2;
+
+            System.out.println("x = " + x + " y = " + y);
+            distance /= 2;
         }
     }
     public static int HIDE = 999;
+
     private static TransformGroup createNodeConnection(double hypot, double angle, boolean rotY) {
-        Appearance app = new Appearance();
-        Box box = new Box(0.02f, (float)hypot/2, 0.02f, app);
-        
+        Color brown = new Color(139, 69, 19);
+        Appearance app = getInstance().createAppearance(brown, true);
+        Box box = new Box(0.02f, (float) hypot / 2, 0.02f, app);
+
         Transform3D tf = new Transform3D();
         Transform3D tfBox = new Transform3D();
-        tfBox.setTranslation(new Vector3f(0.0f, -(float)hypot/2, 0.0f));
+        tfBox.setTranslation(new Vector3f(0.0f, -(float) hypot / 2, 0.0f));
         TransformGroup tgBox = new TransformGroup(tfBox);
         tgBox.addChild(box);
-        
+
         System.out.println(Math.toDegrees(angle));
         //260 250 
         //angle = Math.toRadians(230) + angle;
-        if(rotY){
-            angle*= -1;
+        if (rotY) {
+            angle *= -1;
         }
         tf.rotZ(angle);
-        
+
         //tf.setTranslation(new Vector3f(999, 999, 999));
-        
+
         TransformGroup tg = new TransformGroup(tf);
-        
+
         tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
         tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         tg.addChild(tgBox);
         return tg;
     }
 
-    Appearance createAppearance(Color color, boolean isNumber) {
+    Appearance createAppearance(Color color, boolean noTexture) {
         Appearance app = new Appearance();
         app.setColoringAttributes(new ColoringAttributes(new Color3f(color), 1));
 
-        if (!isNumber) {
+        if (!noTexture) {
             app.setTexture(createTexture("folha.png"));
 
             TexCoordGeneration tcg = new TexCoordGeneration(TexCoordGeneration.OBJECT_LINEAR,
