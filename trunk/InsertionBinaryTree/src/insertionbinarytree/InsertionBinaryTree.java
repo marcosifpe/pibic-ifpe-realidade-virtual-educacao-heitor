@@ -13,8 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.media.j3d.*;
-import javax.swing.*;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -25,34 +40,34 @@ import javax.vecmath.Vector3f;
 import sun.applet.Main;
 
 /**
+ *
  * @author Heitor Paceli Maranhao
  */
 public class InsertionBinaryTree {
 
-    public static final String INSERTION_INFO = "Algoritmo de Inserção em Árvore Binária\n\n\n" +
-            "   O algoritmo antes iniciar a inserção, verifica se o valor já inserido antes. " +
-            "Caso o valor já tenha sido inserido na árvore, é gerado um erro e o algoritmo termina. " +
-            "Caso o valor ainda não esteja presente na árvore, é iniciada a inserção.\n\n" +
-            "   O algoritmo verifica se o nó a ser inserido é maior ou menor que determinado nó da ávore, iniciando com o nó raiz. " +
-            "Caso o nó a ser inserido seja menor, o algoritmo compara com o próximo nó a esquerda. " +
-            "Caso o nó a ser inserido seja maior, o algoritmo compara com o próximo nó a direita. " +
-            "O algoritmo continua realizando as comparações recursivamente até que encontre um nó folha.\n\n" +
-            "   Ao encontrar o nó folha, o algoritmo insere o novo nó no lugar do nó folha.",
-    SEARCH_INFO = "Algoritmo de Busca em Árvore Binária\n\n\n" +
-            "   O algoritmo compara o valor procurado, com o valor de determinado nó da árvore, iniciando com o nó raiz. " +
-            "Se o valor buscado for menor que o valor do nó, compara o próximo nó a esquerda, " +
-            "senão se o valor buscado for maior que o valor do nó, compara o próximo nó a direita.\n\n" +
-            "   As comparações continuam sendo realizadas recursivamente até que o valor seja encontrado, ou o nó comparado seja um nó folha.",
-            REMOVE_INFO= "Algoritmo de Remoção em Árvore Binária\n\n\n" +
-            "   O algoritmo compara o valor procurado, com o valor de determinado nó da árvore, iniciando com o nó raiz. " +
-            "Se o valor buscado for menor que o valor do nó, compara o próximo nó a esquerda, " +
-            "senão se o valor buscado for maior que o valor do nó, compara o próximo nó a direita.\n\n" +
-            "   As comparações continuam sendo realizadas recursivamente até que o valor seja encontrado, ou o nó comparado seja um nó folha.\n\n"+
-            "   Caso o nó comparado seja um nó folha, é gerado um erro e o algoritmo termina. " +
-            "Caso o nó tenha sido encontrado, o algoritmo verifica se o próximo nó a direita é um nó folha, se for troca o nó pelo próximo nó a esquerda, " +
-            "senão, verifica se o próximo nó a esquerda é um nó folha, se for troca o nó pelo próximo nó a direita, " +
-            "senão, troca o valor do nó pelo valor do menor nó dos maiores (nó mais a esquerda, dentre os nós da direita), e remove o menor nó dos maiores.";
-
+    public static final String INSERTION_INFO = "Algoritmo de Inserção em Árvore Binária\n\n\n"
+            + "   O algoritmo antes iniciar a inserção, verifica se o valor já inserido antes. "
+            + "Caso o valor já tenha sido inserido na árvore, é gerado um erro e o algoritmo termina. "
+            + "Caso o valor ainda não esteja presente na árvore, é iniciada a inserção.\n\n"
+            + "   O algoritmo verifica se o nó a ser inserido é maior ou menor que determinado nó da ávore, iniciando com o nó raiz. "
+            + "Caso o nó a ser inserido seja menor, o algoritmo compara com o próximo nó a esquerda. "
+            + "Caso o nó a ser inserido seja maior, o algoritmo compara com o próximo nó a direita. "
+            + "O algoritmo continua realizando as comparações recursivamente até que encontre um nó folha.\n\n"
+            + "   Ao encontrar o nó folha, o algoritmo insere o novo nó no lugar do nó folha.",
+            SEARCH_INFO = "Algoritmo de Busca em Árvore Binária\n\n\n"
+            + "   O algoritmo compara o valor procurado, com o valor de determinado nó da árvore, iniciando com o nó raiz. "
+            + "Se o valor buscado for menor que o valor do nó, compara o próximo nó a esquerda, "
+            + "senão se o valor buscado for maior que o valor do nó, compara o próximo nó a direita.\n\n"
+            + "   As comparações continuam sendo realizadas recursivamente até que o valor seja encontrado, ou o nó comparado seja um nó folha.",
+            REMOVE_INFO = "Algoritmo de Remoção em Árvore Binária\n\n\n"
+            + "   O algoritmo compara o valor procurado, com o valor de determinado nó da árvore, iniciando com o nó raiz. "
+            + "Se o valor buscado for menor que o valor do nó, compara o próximo nó a esquerda, "
+            + "senão se o valor buscado for maior que o valor do nó, compara o próximo nó a direita.\n\n"
+            + "   As comparações continuam sendo realizadas recursivamente até que o valor seja encontrado, ou o nó comparado seja um nó folha.\n\n"
+            + "   Caso o nó comparado seja um nó folha, é gerado um erro e o algoritmo termina. "
+            + "Caso o nó tenha sido encontrado, o algoritmo verifica se o próximo nó a direita é um nó folha, se for troca o nó pelo próximo nó a esquerda, "
+            + "senão, verifica se o próximo nó a esquerda é um nó folha, se for troca o nó pelo próximo nó a direita, "
+            + "senão, troca o valor do nó pelo valor do menor nó dos maiores (nó mais a esquerda, dentre os nós da direita), e remove o menor nó dos maiores.";
     public static final String LEFT_NEXT_MOV = "ESQUERDA", RIGHT_NEXT_MOV = "DIREITA";
     private static SimpleUniverse universe;
     public final static int TEXT_AREA_ROWS = 500,
@@ -179,7 +194,7 @@ public class InsertionBinaryTree {
     public static Node3D root;
     final static float r = 0.1f;
     public static ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public static JTextPane textPane;
     public static TransformGroup searchHighlighter, removeHighlighter;
     private static SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -190,7 +205,8 @@ public class InsertionBinaryTree {
     private static JButton searchButton;
     public static boolean isRunning = false;
     private static Vector3f[] viewPositions;
-    public static final double DISTANCE = 1.8;
+    public static final float DISTANCE = r * 2;
+    public static final int H_MAX = 3;
 
     public static void main(String[] args) {
         //Cor e background do texto não destacado
@@ -558,6 +574,12 @@ public class InsertionBinaryTree {
 
             nodes.add(node3D);
             scene.addChild(node3D.getTgNode());
+            /*
+             * for(int j = 0; j < H_MAX; j++){
+             * scene.addChild(node3D.getL_CON()[j]);
+             * scene.addChild(node3D.getR_CON()[j]); }
+             */
+
         }
         searchHighlighter = Object3DFactory.getInstance().getHighlighter(Color.red);
         removeHighlighter = Object3DFactory.getInstance().getHighlighter(Color.blue);
@@ -681,6 +703,16 @@ public class InsertionBinaryTree {
 
                 root = insertValue(node, root, r * 2);
 
+                int nodeH = getNodeHeight(node);
+                Node3D parent = node.getParent();
+                if(parent != null){
+                    if(node == parent.getLeft()){
+                        parent.showLConnection(nodeH);
+                    } else {
+                        parent.showRConnection(nodeH);
+                    }
+                }
+
                 sleep(SLEEP_TIME * 3);
                 highlightMov(null, searchHighlighter);
             }
@@ -713,7 +745,7 @@ public class InsertionBinaryTree {
             node.getText3D().setString(Integer.toString(num));
             ArrayList<Integer> directions = new ArrayList();
             insert(node, directions);
-            float distance = r * 2;
+            float distance = DISTANCE;
 
             showHighlighter(removeHighlighter);
             highlightMov(node, searchHighlighter);
@@ -1015,7 +1047,7 @@ public class InsertionBinaryTree {
             node.getText3D().setString(Integer.toString(node.getValue()));
             node.setParent(null);
             insert(node, directions);
-            float distance = r * 2;
+            float distance = DISTANCE;
 
             showHighlighter(searchHighlighter);
             highlightMov(node, removeHighlighter);
@@ -1232,6 +1264,7 @@ public class InsertionBinaryTree {
 
         JMenuItem menuItem = new JMenuItem("Inserção", KeyEvent.VK_I);
         menuItem.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 showInfo("Inserção", INSERTION_INFO);
             }
@@ -1240,6 +1273,7 @@ public class InsertionBinaryTree {
 
         menuItem = new JMenuItem("Busca", KeyEvent.VK_B);
         menuItem.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 showInfo("Busca", SEARCH_INFO);
             }
@@ -1248,6 +1282,7 @@ public class InsertionBinaryTree {
 
         menuItem = new JMenuItem("Remoção", KeyEvent.VK_R);
         menuItem.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 showInfo("Remoção", REMOVE_INFO);
             }
@@ -1271,5 +1306,17 @@ public class InsertionBinaryTree {
         frame.setVisible(true);
         frame.setLocationRelativeTo(textPane);
         frame.setAlwaysOnTop(true);
+    }
+
+    private static int getNodeHeight(Node3D node) {
+        int h = -1;
+        if (node != null) {
+            //Enquanto node nao for o root
+            while (node.getParent() != null) {
+                node = node.getParent();
+                h++;
+            }
+        }
+        return h;
     }
 }

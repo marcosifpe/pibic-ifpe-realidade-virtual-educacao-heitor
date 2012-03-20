@@ -10,20 +10,10 @@ import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Color;
 import java.awt.Font;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.Font3D;
-import javax.media.j3d.FontExtrusion;
-import javax.media.j3d.ImageComponent2D;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.TexCoordGeneration;
-import javax.media.j3d.Text3D;
-import javax.media.j3d.Texture;
-import javax.media.j3d.Texture2D;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
+import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 /**
@@ -34,9 +24,10 @@ public class Object3DFactory {
 
     private static Object3DFactory instance;
     private static float leafSize = 0.03f;
-    public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r*-7, zInitial = 0.0f;
+    public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r * -7, zInitial = 0.0f;
+
     private float highlighterH = 0.1f;
-    private float highlighterR = InsertionBinaryTree.r+0.02f;
+    private float highlighterR = InsertionBinaryTree.r + 0.02f;
 
     private Object3DFactory() {
     }
@@ -48,12 +39,10 @@ public class Object3DFactory {
         return instance;
     }
 
-    public TransformGroup getHighlighter(Color color){
+    public TransformGroup getHighlighter(Color color) {
         Transform3D tfHighlighter = new Transform3D();
         //Roda o eixo X para que o cilindro fique na posicao certa
         tfHighlighter.rotX(Math.toRadians(90));
-        //Localizacao no nó root
-        //tfHighlighter.setTranslation(new Vector3f(0.0f, Object3DFactory.yInitial, 0.0f));
 
         TransformGroup tgHighlighter = new TransformGroup(tfHighlighter);
         Cylinder cy = new Cylinder(highlighterR, highlighterH, createAppearance(color, true));
@@ -74,7 +63,6 @@ public class Object3DFactory {
 
         tg.addChild(tgHighlighter);
         //------------
-        //return tgHighlighter;
         return tg;
     }
 
@@ -115,7 +103,6 @@ public class Object3DFactory {
         node.setTgNode(tgNode);
 
         Transform3D tfLeftLeaf = new Transform3D();
-        //tfLeftLeaf.setTranslation(new Vector3f(-InsertionBinaryTree.r*2, -InsertionBinaryTree.r*2, InsertionBinaryTree.r*2));
         //esconde a folha
         tfLeftLeaf.setTranslation(new Vector3f(999, 999, 999));
         TransformGroup tgLeftLeaf = new TransformGroup(tfLeftLeaf);
@@ -125,7 +112,7 @@ public class Object3DFactory {
         Box leftLeaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false));
         tgLeftLeaf.addChild(leftLeaf);
 
-        
+
         Transform3D tfRightLeaf = new Transform3D();
         //tfRightLeaf.setTranslation(new Vector3f(InsertionBinaryTree.r*2, -InsertionBinaryTree.r*2, InsertionBinaryTree.r*2));
         tfRightLeaf.setTranslation(new Vector3f(999, 999, 999));
@@ -142,7 +129,98 @@ public class Object3DFactory {
         //node.getTgNode().addChild(tgRightLeaf);
 
         node.hideNode(node);
+        calculateConnections(node);
         return node;
+    }
+
+    public static void calculateConnections(Node3D node) {
+        //float d = distance/5/dist;
+        
+        float distance = InsertionBinaryTree.DISTANCE / 5;
+        for (int i =0; i < InsertionBinaryTree.H_MAX; i++) {
+            float x = 0, y = yInitial;
+            float cont = 0.0f;
+            float d = InsertionBinaryTree.DISTANCE / 5/distance;
+            while (true) {
+                //testa se chegou a posicao certa
+                if (cont >= (4 * InsertionBinaryTree.r)) {
+                    break;
+                }
+                //define a nova posicao
+                x -= distance;
+                y -= 0.01f;
+                cont += 0.01f;
+            }
+            double hypot = Math.hypot(y, x);
+            double angle = Math.atan2(y, x);
+            if(i == 0){
+                angle += Math.toRadians(260);
+            } else if(i == 1){
+                angle += Math.toRadians(250);
+            } else{
+                angle+=Math.toRadians(240);
+                hypot+=0.1f;
+            }
+            
+            
+            //hypot/=2;
+            TransformGroup right = createNodeConnection(hypot, angle, false);
+            TransformGroup left = createNodeConnection(hypot, angle, true);
+            
+            Transform3D tfL = new Transform3D();
+            left.getTransform(tfL);
+            Transform3D tfR = new Transform3D();
+            right.getTransform(tfR);
+            
+            node.addLCon(i, left);
+            node.addLConTf(i, tfL);
+            node.addRCon(i, right);
+            node.addRConTf(i, tfR);
+            
+            
+            Transform3D tfHide = new Transform3D();
+            tfHide.setTranslation(new Vector3f(999, 999,999));
+            left.setTransform(tfHide);
+            right.setTransform(tfHide);
+            
+                        
+            node.getTgNode().addChild(left);
+            node.getTgNode().addChild(right);
+            
+            //node.hideLConnection();
+            //node.hideRConnection();
+            
+            System.out.println("x = " + x + " y = "+y);
+            distance/=2;
+        }
+    }
+    public static int HIDE = 999;
+    private static TransformGroup createNodeConnection(double hypot, double angle, boolean rotY) {
+        Appearance app = new Appearance();
+        Box box = new Box(0.02f, (float)hypot/2, 0.02f, app);
+        
+        Transform3D tf = new Transform3D();
+        Transform3D tfBox = new Transform3D();
+        tfBox.setTranslation(new Vector3f(0.0f, -(float)hypot/2, 0.0f));
+        TransformGroup tgBox = new TransformGroup(tfBox);
+        tgBox.addChild(box);
+        
+        System.out.println(Math.toDegrees(angle));
+        //260 250 
+        //angle = Math.toRadians(230) + angle;
+        if(rotY){
+            angle*= -1;
+        }
+        tf.rotZ(angle);
+        
+        //tf.setTranslation(new Vector3f(999, 999, 999));
+        
+        TransformGroup tg = new TransformGroup(tf);
+        
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        tg.addChild(tgBox);
+        return tg;
     }
 
     Appearance createAppearance(Color color, boolean isNumber) {
@@ -152,10 +230,10 @@ public class Object3DFactory {
         if (!isNumber) {
             app.setTexture(createTexture("folha.png"));
 
-        TexCoordGeneration tcg = new TexCoordGeneration(TexCoordGeneration.OBJECT_LINEAR,
-                TexCoordGeneration.TEXTURE_COORDINATE_2);
+            TexCoordGeneration tcg = new TexCoordGeneration(TexCoordGeneration.OBJECT_LINEAR,
+                    TexCoordGeneration.TEXTURE_COORDINATE_2);
 
-        app.setTexCoordGeneration(tcg);
+            app.setTexCoordGeneration(tcg);
         }
 
         return app;
