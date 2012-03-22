@@ -188,7 +188,7 @@ public class Object3DFactory {
             //node.hideLConnection();
             //node.hideRConnection();
 
-            System.out.println("x = " + x + " y = " + y);
+            //System.out.println("x = " + x + " y = " + y);
             distance /= 2;
         }
     }
@@ -205,7 +205,7 @@ public class Object3DFactory {
         TransformGroup tgBox = new TransformGroup(tfBox);
         tgBox.addChild(box);
 
-        System.out.println(Math.toDegrees(angle));
+        //System.out.println(Math.toDegrees(angle));
         //260 250 
         //angle = Math.toRadians(230) + angle;
         if (rotY) {

@@ -188,13 +188,13 @@ public class InsertionBinaryTree {
     public static final String DELETE_CODE = DELETE_TITLE + DELETE + DELETE_IF_NULL + DELETE_ERROR + DELETE_LOWER + DELETE_LEFT + DELETE_GREATER + DELETE_RIGHT
             + DELETE_ELSE + DELETE_EQUALS + DELETE_TEMP1 + DELETE_NODE_L + DELETE_DELETE1 + DELETE_L_LEAF + DELETE_TEMP2 + DELETE_NODE_R + DELETE_DELETE2
             + DELETE_ELSE2 + DELETE_FIND_SUBSTITUTE + DELETE_NODE_MIN + DELETE_TEMP_MIN + DELETE_MIN_RIGHT + DELETE_DEL_TEMP + "   }" + newRow + " }" + newRow + DELETE_RETURN + "}" + newRow + newRow + FIND_CODE;
-    private static final int NUMBER_OF_VALUES = 5;
+    private static final int NUMBER_OF_VALUES = 15;
     public static int capacity = NUMBER_OF_VALUES;
     public static final int LEFT = -1, RIGTH = 1;
     public static Node3D root;
     final static float r = 0.1f;
     public static ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public static JTextPane textPane;
     public static TransformGroup searchHighlighter, removeHighlighter;
     private static SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -345,6 +345,10 @@ public class InsertionBinaryTree {
         }
     }
 
+    public static int getHBinaryTree(){
+        return getHBinaryTree(root);
+    }
+    
     private static int getHBinaryTree(Node3D node) {
         if (node == null) {
             return -1; // altura de árvore vazia é -1
@@ -705,8 +709,8 @@ public class InsertionBinaryTree {
 
                 int nodeH = getNodeHeight(node);
                 Node3D parent = node.getParent();
-                if(parent != null){
-                    if(node == parent.getLeft()){
+                if (parent != null) {
+                    if (node == parent.getLeft()) {
                         parent.showLConnection(nodeH);
                     } else {
                         parent.showRConnection(nodeH);
@@ -1308,7 +1312,7 @@ public class InsertionBinaryTree {
         frame.setAlwaysOnTop(true);
     }
 
-    private static int getNodeHeight(Node3D node) {
+    public static int getNodeHeight(Node3D node) {
         int h = -1;
         if (node != null) {
             //Enquanto node nao for o root
@@ -1318,5 +1322,23 @@ public class InsertionBinaryTree {
             }
         }
         return h;
+    }
+
+    public static int prevNodeHeight(int n) {
+        int cont = 1;
+        Node3D node = root;
+
+        while (node != null) {
+            cont++;
+            if (node.getValue() == n) {
+                break;
+            } else if (n < node.getValue()) {
+                node = node.getLeft();
+            } else {
+                node = node.getRight();
+            }
+        }
+        System.out.println("cont = " + cont);
+        return cont;
     }
 }
