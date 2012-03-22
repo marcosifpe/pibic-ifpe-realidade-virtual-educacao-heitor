@@ -114,7 +114,7 @@ public class Node3D {
     public void showLeftLeaf() {
         if (LEFT_LEAF != null) {
             Transform3D tfLeftLeaf = new Transform3D();
-            tfLeftLeaf.setTranslation(new Vector3f(-InsertionBinaryTree.r * 2, -InsertionBinaryTree.r * 2, InsertionBinaryTree.r * 2));
+            tfLeftLeaf.setTranslation(new Vector3f(-InsertionBinaryTree.r * 2-Object3DFactory.leafSize/2, -InsertionBinaryTree.r * 2, InsertionBinaryTree.r * 2));
             LEFT_LEAF.setTransform(tfLeftLeaf);
         }
     }
@@ -122,7 +122,7 @@ public class Node3D {
     void showRightLeaf() {
         if (RIGHT_LEAF != null) {
             Transform3D tfRightLeaf = new Transform3D();
-            tfRightLeaf.setTranslation(new Vector3f(InsertionBinaryTree.r * 2, -InsertionBinaryTree.r * 2, InsertionBinaryTree.r * 2));
+            tfRightLeaf.setTranslation(new Vector3f(InsertionBinaryTree.r * 2+Object3DFactory.leafSize, -InsertionBinaryTree.r * 2, InsertionBinaryTree.r * 2));
             RIGHT_LEAF.setTransform(tfRightLeaf);
         }
     }

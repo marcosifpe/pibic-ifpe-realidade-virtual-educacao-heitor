@@ -13,7 +13,6 @@ import java.awt.Font;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
-import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 /**
@@ -23,7 +22,7 @@ import javax.vecmath.Vector3f;
 public class Object3DFactory {
 
     private static Object3DFactory instance;
-    private static float leafSize = 0.03f;
+    public static float leafSize = 0.03f;
     public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r * -7, zInitial = 0.0f;
     private float highlighterH = 0.1f;
     private float highlighterR = InsertionBinaryTree.r + 0.02f;
