@@ -345,10 +345,10 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static int getHBinaryTree(){
+    public static int getHBinaryTree() {
         return getHBinaryTree(root);
     }
-    
+
     private static int getHBinaryTree(Node3D node) {
         if (node == null) {
             return -1; // altura de árvore vazia é -1
@@ -578,12 +578,6 @@ public class InsertionBinaryTree {
 
             nodes.add(node3D);
             scene.addChild(node3D.getTgNode());
-            /*
-             * for(int j = 0; j < H_MAX; j++){
-             * scene.addChild(node3D.getL_CON()[j]);
-             * scene.addChild(node3D.getR_CON()[j]); }
-             */
-
         }
         searchHighlighter = Object3DFactory.getInstance().getHighlighter(Color.red);
         removeHighlighter = Object3DFactory.getInstance().getHighlighter(Color.blue);
@@ -737,64 +731,6 @@ public class InsertionBinaryTree {
 
     }
 
-    public static void startInsertValue(int num) {
-        Node3D node = nodes.remove(0);
-
-        if (node == null) {
-            return;
-        } else {
-            resetNode(node, false);
-            node.setAutoUpdateText(true);
-            node.setValue(num);
-            node.getText3D().setString(Integer.toString(num));
-            ArrayList<Integer> directions = new ArrayList();
-            insert(node, directions);
-            float distance = DISTANCE;
-
-            showHighlighter(removeHighlighter);
-            highlightMov(node, searchHighlighter);
-
-            Transform3D tfTemp = null;
-            for (int i = directions.size() - 1; i >= 0; i--) {
-                tfTemp = insert3D(node, directions.get(i), distance / 5, false, removeHighlighter);
-                distance /= 2;
-            }
-
-            highlightsText(INSERT, INSERT_CODE);
-            highlightsText(INSERT_IF_NULL, INSERT_CODE);
-            highlightsText(INSERT_NEW_NODE, INSERT_CODE);
-            if (node != null && tfTemp != null) {
-                node.getTgNode().setTransform(tfTemp);
-            } else {
-                if (node != null) {
-                    node.moveToPosition(0.0, Object3DFactory.yInitial, 0.0);
-                }
-            }
-            sleep(SLEEP_TIME * 3);
-            highlightMov(null, removeHighlighter);
-            highlightMov(null, searchHighlighter);
-            //Chama o metodo que exibe as folhas
-            sleep(SLEEP_TIME);
-
-            //recupera o no pai, se nao for nulo esconde o no folha do lado que o novo no foi inserido
-            Node3D parent = node.getParent();
-            if (parent != null) {
-                if (node.getValue() < parent.getValue()) {
-                    parent.hideLeftLeaf();
-                } else {
-                    parent.hideRightLeaf();
-                }
-            }
-            highlightsText(INSERT_NEW_VALUE, INSERT_CODE);
-
-            node.showLeftLeaf();
-            node.showRightLeaf();
-            //Remove destaque
-            textPane.getStyledDocument().setCharacterAttributes(0, INSERT_CODE.length(), deafaultText, true);
-        }
-
-    }
-
     public static void addLight(SimpleUniverse su) {
 
         BranchGroup bgLight = new BranchGroup();
@@ -826,71 +762,6 @@ public class InsertionBinaryTree {
         int i = code.indexOf(string);
         textPane.getStyledDocument().setCharacterAttributes(i, string.length(), highlightedText, true);
         sleep(SLEEP_TIME * 30);
-    }
-
-    public static boolean remove(int num) {
-        boolean result;
-        highlightMov(root, searchHighlighter);
-        highlightsText(REMOVE, COMPLETE_REMOVE);
-        highlightsText(REMOVE_IF_NULL, COMPLETE_REMOVE);
-        if (root == null) {
-            highlightsText(REMOVE_FALSE, COMPLETE_REMOVE);
-            result = false;
-            return false;
-        } else {
-            highlightsText(REMOVE_ELSE, COMPLETE_REMOVE);
-            //Se root é o valor que vai ser removido, cria um no pai para root
-            highlightsText(REMOVE_ROOT, COMPLETE_REMOVE);
-            if (root.getValue() == num) {
-                highlightsText(REMOVE_TEMP, COMPLETE_REMOVE);
-                Node3D aux = new Node3D();
-                highlightsText(REMOVE_TEMP_L, COMPLETE_REMOVE);
-                //Define um valor maior para procurar na esquerda
-                aux.setValue(root.getValue() + 1);
-                aux.setLeft(root);
-                highlightsText(REMOVE_RESULT, COMPLETE_REMOVE);
-                result = root.remove(num, aux);
-                highlightsText(REMOVE_ROOT_TEMP, COMPLETE_REMOVE);
-                root = aux.getLeft();
-
-            } else {
-                highlightsText(REMOVE_ELSE2, COMPLETE_REMOVE);
-                highlightsText(REMOVE_RETURN_REMOVE, COMPLETE_REMOVE);
-                //remove o nó de uma subaravore de root
-                result = root.remove(num, null);
-            }
-        }
-        highlightMov(null, searchHighlighter);
-        highlightsText(REMOVE_RETURN_RESULT, COMPLETE_REMOVE);
-        if (result) {
-            capacity++;
-        }
-        return result;
-    }
-
-    private static void moveSubstitute(Node3D node) {
-        node.setAutoUpdateText(true);
-        Node3D min = node.getRight().minNode();
-        node.setValue(min.getValue());
-
-        //Pega todos os nós para inserir de novo para ficar na posição certa
-        ArrayList<Node3D> nodesArray = min.getAllNodes(min);
-
-        min.hideNode(min);
-        //Remove o nó da árvore
-        if (min.getParent().getLeft() == min) {
-            min.getParent().setLeft(null);
-            min.getParent().showLeftLeaf();
-        }
-        if (min.getParent().getRight() == min) {
-            min.getParent().setRight(null);
-            min.getParent().showRightLeaf();
-        }
-
-        resetNode(min, true);
-        min = null;
-        //Chama o método para inserir
-        reinsert(nodesArray);
     }
 
     public static void delete(int element, Node3D node) {
@@ -1085,6 +956,32 @@ public class InsertionBinaryTree {
                 }
             }
             directions.clear();
+        }
+    }
+
+    public static void updateConnections(Node3D node) {
+        System.out.println("update");
+        if (node != null) {
+            
+            Node3D left = node.getLeft();
+            Node3D right = node.getRight();
+            int h = getNodeHeight(node);
+            
+            if (left == null) {
+                node.hideLConnection();
+            } else {
+                System.out.println("esconde esquerda");
+                node.showLConnection(h);
+                updateConnections(left);
+            }
+
+            if (right == null) {
+                node.hideRConnection();
+            } else {
+                System.out.println("esconde direita");
+                node.showRConnection(h);
+                updateConnections(right);
+            }
         }
     }
 
