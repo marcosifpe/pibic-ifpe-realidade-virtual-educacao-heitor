@@ -322,6 +322,14 @@ public class Node3D {
             return left.minNode();
         }
     }
+    
+    public Node3D maxNode() {
+        if (right == null) {
+            return this;
+        } else {
+            return right.maxNode();
+        }
+    }
 
     private void moveSubstitute() {
         this.setAutoUpdateText(true);

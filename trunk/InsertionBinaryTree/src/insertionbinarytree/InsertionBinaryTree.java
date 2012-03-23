@@ -219,7 +219,7 @@ public class InsertionBinaryTree {
         JFrame frame = createFrame();
     }
 
-    public static int viewX() {
+    public static int viewLeft(){
         int contLeft = 0;
         Node3D node = root;
         //Calcula quantos nos estao a esquerda
@@ -229,7 +229,11 @@ public class InsertionBinaryTree {
                 contLeft++;
             }
         }
-        node = root;
+        return contLeft;
+    }
+    
+    public static int viewRight(){
+        Node3D node = root;
         int contRight = 0;
         //Calcula quantos nos estao a direita
         while (node != null) {
@@ -238,10 +242,46 @@ public class InsertionBinaryTree {
                 contRight++;
             }
         }
+        return contRight;
+    }
+    
+    public static int viewX() {
+        Node3D node =root;
+        int contLeft = viewLeft();
+        int contRight = viewRight();
+        
         if (contLeft > contRight) {
             return contLeft;
         } else {
             return contRight;
+        }
+    }
+
+    public static int prevViewX(int n) {
+        int lView = viewLeft();
+        int rView = viewRight();
+        int view=0;
+        
+        if (root != null) {
+            if(n < root.minNode().getValue()){
+                if(lView+1 > rView){
+                    view = lView+1;
+                }else{
+                    view = rView;
+                }
+                return view;
+            }else if(n > root.maxNode().getValue()){
+                if(rView+1 > lView){
+                    view = rView+1;
+                }else{
+                    view = lView;
+                }
+                return view;
+            }else{
+                return viewX();
+            }
+        } else {
+            return 0;
         }
     }
 
@@ -965,7 +1005,7 @@ public class InsertionBinaryTree {
 
             Node3D left = node.getLeft();
             Node3D right = node.getRight();
-            int h = getNodeHeight(node)+1;
+            int h = getNodeHeight(node) + 1;
 
             if (left == null) {
                 node.hideLConnection();
