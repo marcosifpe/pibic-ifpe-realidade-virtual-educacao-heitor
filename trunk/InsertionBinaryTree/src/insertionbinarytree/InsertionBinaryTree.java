@@ -38,8 +38,7 @@ import sun.applet.Main;
 
 /**
  *
- * @author Heitor Paceli Maranhao
- * email: heitorpaceli@gmail.com
+ * @author Heitor Paceli Maranhao email: heitorpaceli@gmail.com
  */
 public class InsertionBinaryTree {
 
@@ -372,12 +371,17 @@ public class InsertionBinaryTree {
 
         float Z_CHANGE = 2.4f, Y_CHANGE = 0.2f;
 
+        view.z += Z_CHANGE;
+        view.y -= Y_CHANGE;
+        Z_CHANGE -= 0.1f;
+
+
         for (int i = 0; i < viewPositions.length; i++) {
             viewPositions[i] = new Vector3f(view);
             view.z += Z_CHANGE;
             view.y -= Y_CHANGE;
             Z_CHANGE -= 0.1f;
-            if (Z_CHANGE < 1.5f) {
+            if (Z_CHANGE > 1.5f) {
                 Z_CHANGE = 1.5f;
             }
         }
@@ -1002,17 +1006,17 @@ public class InsertionBinaryTree {
     public static void updateConnections(Node3D node, int h) {
 
         if (node != null) {
-            
+
             Node3D left = node.getLeft();
             Node3D right = node.getRight();
-            
+
             node.hideLConnection();
             node.showLConnection(h);
-            updateConnections(left, h+1);
+            updateConnections(left, h + 1);
 
             node.hideRConnection();
             node.showRConnection(h);
-            updateConnections(right, h+1);
+            updateConnections(right, h + 1);
 
         }
 
