@@ -191,7 +191,7 @@ public class InsertionBinaryTree {
     public static Node3D root;
     final static float r = 0.1f;
     public static ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public static JTextPane textPane;
     public static TransformGroup searchHighlighter, removeHighlighter;
     private static SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -998,21 +998,20 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static void updateConnections(Node3D node) {
+    public static void updateConnections(Node3D node, int h) {
 
         if (node != null) {
-
+            
             Node3D left = node.getLeft();
             Node3D right = node.getRight();
-            int h = getNodeHeight(node) + 1;
-
+            
             node.hideLConnection();
             node.showLConnection(h);
-            updateConnections(left);
+            updateConnections(left, h+1);
 
             node.hideRConnection();
             node.showRConnection(h);
-            updateConnections(right);
+            updateConnections(right, h+1);
 
         }
 
@@ -1268,7 +1267,6 @@ public class InsertionBinaryTree {
                 node = node.getRight();
             }
         }
-        System.out.println("cont = " + cont);
         return cont;
     }
 }
