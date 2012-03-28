@@ -39,6 +39,7 @@ import sun.applet.Main;
 /**
  *
  * @author Heitor Paceli Maranhao
+ * email: heitorpaceli@gmail.com
  */
 public class InsertionBinaryTree {
 
