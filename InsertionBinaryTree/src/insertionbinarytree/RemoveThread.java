@@ -13,9 +13,11 @@ import javax.swing.JOptionPane;
  * email: heitorpaceli@gmail.com
  */
 public class RemoveThread extends Thread {
+    private final InsertionBinaryTree tree;
 
-    public RemoveThread(String name) {
+    public RemoveThread(String name, InsertionBinaryTree tree) {
         super(name);
+        this.tree = tree;
     }
 
     @Override
@@ -25,18 +27,18 @@ public class RemoveThread extends Thread {
 
     private void remove() {
         try {
-            InsertionBinaryTree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
-            InsertionBinaryTree.textPane.setText(InsertionBinaryTree.DELETE_CODE);
-            String numString = JOptionPane.showInputDialog(InsertionBinaryTree.textPane, "Qual elemento deseja Remover?");
+            tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
+            tree.textPane.setText(InsertionBinaryTree.DELETE_CODE);
+            String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja Remover?");
             int num = Integer.parseInt(numString);
-            //InsertionBinaryTree.remove(num);
-            InsertionBinaryTree.delete(num, InsertionBinaryTree.root);
-            InsertionBinaryTree.clearHighlight(InsertionBinaryTree.textPane, InsertionBinaryTree.DELETE_CODE);
-            InsertionBinaryTree.updateInsertButton();
+            //Insertiontree.remove(num);
+            tree.delete(num, tree.root);
+            tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
+            tree.updateInsertButton();
         } finally {
-            InsertionBinaryTree.updateConnections(InsertionBinaryTree.root, 0);
-            InsertionBinaryTree.isRunning = false;
-            InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
+            tree.updateConnections(tree.root, 0);
+            tree.isRunning = false;
+            tree.moveView(tree.viewX());
         }
     }
 }

@@ -128,7 +128,7 @@ public class Node3D {
         }
     }
 
-    void showRightLeaf() {
+    public void showRightLeaf() {
         if (RIGHT_LEAF != null) {
             Transform3D tfRightLeaf = new Transform3D();
             tfRightLeaf.setTranslation(new Vector3f(InsertionBinaryTree.r * 2+Object3DFactory.leafSize, -InsertionBinaryTree.r * 2, InsertionBinaryTree.r * 2));
@@ -217,113 +217,6 @@ public class Node3D {
         text3d.setString(text);
     }
 
-    //
-    public boolean remove(int value, Node3D parent) {
-
-        InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2, InsertionBinaryTree.COMPLETE_REMOVE);
-        InsertionBinaryTree.highlightMov(this, InsertionBinaryTree.searchHighlighter);
-        InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_LOWER, InsertionBinaryTree.COMPLETE_REMOVE);
-
-        if (value < this.value) {
-
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_L_LEAF, InsertionBinaryTree.COMPLETE_REMOVE);
-
-            //testa se o proximo no não é folha
-            if (left != null) {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_RETURN_REMOVE, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                return left.remove(value, this);
-            } else {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_ELSE, InsertionBinaryTree.COMPLETE_REMOVE);
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_FALSE, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                return false;
-            }
-        } else if (value > this.value) {
-
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_GREATER, InsertionBinaryTree.COMPLETE_REMOVE);
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_R_LEAF, InsertionBinaryTree.COMPLETE_REMOVE);
-
-            //testa se o proximo no não é folha
-            if (right != null) {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_RETURN_REMOVE2, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                return right.remove(value, this);
-            } else {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_ELSE2, InsertionBinaryTree.COMPLETE_REMOVE);
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_FALSE2, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                return false;
-            }
-        }//Se encontrou o valor
-        else {
-
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_GREATER, InsertionBinaryTree.COMPLETE_REMOVE);
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_ELSE3, InsertionBinaryTree.COMPLETE_REMOVE);
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_NO_LEAF, InsertionBinaryTree.COMPLETE_REMOVE);
-
-            //Testa se os 2 nós filhos não são folhas
-            if (left != null && right != null) {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_MIN, InsertionBinaryTree.COMPLETE_REMOVE);
-                //Usa menor dos maiores
-                moveSubstitute();
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_REMOVE_MIN, InsertionBinaryTree.COMPLETE_REMOVE);
-            } else if (parent.left == this) {  //Um ou 2 dos filhos sempre vai ser nulo
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_R_CHILD, InsertionBinaryTree.COMPLETE_REMOVE);
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_P_LEFT, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                //Pega todos os nós para inserir de novo para ficar na posição certa
-                ArrayList<Node3D> nodes = getAllNodes(this);
-
-                parent.left = (left != null) ? left : right;
-                //Destaca o no
-                InsertionBinaryTree.highlightMov(parent.left, InsertionBinaryTree.removeHighlighter);
-
-                hideNode(this);
-                InsertionBinaryTree.nodes.add(this);
-
-                //Chama o método para inserir
-                InsertionBinaryTree.reinsert(nodes);
-            } else if (parent.right == this) {
-
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_R_CHILD, InsertionBinaryTree.COMPLETE_REMOVE);
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_L_CHILD, InsertionBinaryTree.COMPLETE_REMOVE);
-                InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_P_RIGHT, InsertionBinaryTree.COMPLETE_REMOVE);
-
-                //Pega todos os nós para inserir de novo para ficar na posição certa
-                ArrayList<Node3D> nodes = getAllNodes(this);
-
-                parent.right = (left != null) ? left : right;
-                InsertionBinaryTree.highlightMov(parent.right, InsertionBinaryTree.removeHighlighter);
-
-                hideNode(this);
-                InsertionBinaryTree.nodes.add(this);
-
-                //Chama o método para inserir
-                InsertionBinaryTree.reinsert(nodes);
-            }
-            InsertionBinaryTree.highlightMov(null, InsertionBinaryTree.removeHighlighter);
-
-            //Mostra as folhas
-            if (parent.left == null) {
-                InsertionBinaryTree.sleep(InsertionBinaryTree.SLEEP_TIME * 3);
-                parent.showLeftLeaf();
-            }
-            if (parent.right == null) {
-                InsertionBinaryTree.sleep(InsertionBinaryTree.SLEEP_TIME * 3);
-                parent.showRightLeaf();
-            }
-            InsertionBinaryTree.highlightsText(InsertionBinaryTree.REMOVE2_TRUE, InsertionBinaryTree.COMPLETE_REMOVE);
-            return true;
-        }
-    }
-
     public Node3D minNode() {
         if (left == null) {
             return this;
@@ -338,32 +231,6 @@ public class Node3D {
         } else {
             return right.maxNode();
         }
-    }
-
-    private void moveSubstitute() {
-        this.setAutoUpdateText(true);
-        Node3D min = right.minNode();
-        this.setValue(min.value);
-
-        //Pega todos os nós para inserir de novo para ficar na posição certa
-        ArrayList<Node3D> nodes = getAllNodes(min);
-
-        hideNode(min);
-        //Remove o nó da árvore
-        if (min.parent.left == min) {
-            min.parent.left = null;
-            min.parent.showLeftLeaf();
-        }
-        if (min.parent.right == min) {
-            min.parent.right = null;
-            min.parent.showRightLeaf();
-        }
-
-        InsertionBinaryTree.nodes.add(min);
-
-        //InsertionBinaryTree.resetNode(min);
-        //Chama o método para inserir
-        InsertionBinaryTree.reinsert(nodes);
     }
 
     public ArrayList<Node3D> getAllNodes(Node3D node) {
@@ -402,7 +269,7 @@ public class Node3D {
         node.getTgNode().setTransform(tfHide);
     }
 
-    void moveToPosition(double x, double y, double z) {
+    public void moveToPosition(double x, double y, double z) {
         Transform3D tf = new Transform3D();
         tf.setTranslation(new Vector3d(x, y, z));
 
