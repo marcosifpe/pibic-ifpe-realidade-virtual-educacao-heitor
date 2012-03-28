@@ -23,7 +23,7 @@ import javax.vecmath.Vector3f;
 public class Object3DFactory {
 
     private static Object3DFactory instance;
-    public static float leafSize = 0.03f;
+    public static float leafSize = 0.04f;
     public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r * -7, zInitial = 0.0f;
     private float highlighterH = 0.1f;
     private float highlighterR = InsertionBinaryTree.r + 0.02f;
@@ -200,8 +200,7 @@ public class Object3DFactory {
         //-----------------------------
         
         Transform3D tfLeaf = new Transform3D();
-        //esconde a folha
-        tfLeaf.setTranslation(new Vector3f(0.0f, -(float) hypot - (leafSize/2), 0.0f));
+        tfLeaf.setTranslation(new Vector3f(0.0f, -(float) hypot - InsertionBinaryTree.r, 0.0f));
         TransformGroup tgLeaf = new TransformGroup(tfLeaf);
         tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
@@ -214,7 +213,7 @@ public class Object3DFactory {
 
         Transform3D tf = new Transform3D();
         Transform3D tfBox = new Transform3D();
-        tfBox.setTranslation(new Vector3f(0.0f, -(float) hypot / 2, 0.0f));
+        tfBox.setTranslation(new Vector3f(0.0f, -(float) hypot / 2 -InsertionBinaryTree.r, 0.0f));
         TransformGroup tgBox = new TransformGroup(tfBox);
         tgBox.addChild(box);
 

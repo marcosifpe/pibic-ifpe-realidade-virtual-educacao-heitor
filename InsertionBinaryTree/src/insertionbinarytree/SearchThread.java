@@ -29,7 +29,7 @@ public class SearchThread extends Thread {
             InsertionBinaryTree.textPane.setText(InsertionBinaryTree.SEARCH_CODE);
             String numString = JOptionPane.showInputDialog(InsertionBinaryTree.textPane, "Qual elemento deseja buscar?");
             int num = Integer.parseInt(numString);
-
+            InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
             Node3D result = InsertionBinaryTree.search(num);
 
             String message = (result != null) ? "Valor encontrado" : "Valor não encontrado";
