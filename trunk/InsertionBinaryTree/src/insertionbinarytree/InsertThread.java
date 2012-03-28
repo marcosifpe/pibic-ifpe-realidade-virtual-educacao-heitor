@@ -13,9 +13,11 @@ import javax.swing.JOptionPane;
  * email: heitorpaceli@gmail.com
  */
 public class InsertThread extends Thread {
+    private final InsertionBinaryTree tree;
 
-    public InsertThread(String name) {
+    public InsertThread(String name,InsertionBinaryTree tree) {
         super(name);
+        this.tree = tree;
     }
 
     @Override
@@ -27,28 +29,28 @@ public class InsertThread extends Thread {
         try {
             //InsertionBinaryTree.moveView(InsertionBinaryTree.viewX() + 1);
             
-            InsertionBinaryTree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
-            InsertionBinaryTree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
-            String numString = JOptionPane.showInputDialog(InsertionBinaryTree.textPane, "Qual elemento deseja inserir?");
+            tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
+            tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
+            String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja inserir?");
             int num = Integer.parseInt(numString);
             
             
-            int h = InsertionBinaryTree.prevNodeHeight(num);
+            int h = tree.prevNodeHeight(num);
             
             int hMax = InsertionBinaryTree.H_MAX+1;
             if (h > hMax) {
-                JOptionPane.showMessageDialog(InsertionBinaryTree.textPane, "Por questões de visualização, "
+                JOptionPane.showMessageDialog(tree.textPane, "Por questões de visualização, "
                         + "não é permitido\n que a altura seja maior que " + hMax, "Altura máxima", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                InsertionBinaryTree.moveView(InsertionBinaryTree.prevViewX(num));
-                InsertionBinaryTree.insertValue(num);
-                InsertionBinaryTree.clearHighlight(InsertionBinaryTree.textPane, InsertionBinaryTree.INSERT_CODE);
-                InsertionBinaryTree.updateInsertButton();
+                tree.moveView(tree.prevViewX(num));
+                tree.insertValue(num);
+                tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
+                tree.updateInsertButton();
             }
         } finally {
-            InsertionBinaryTree.updateConnections(InsertionBinaryTree.root, 0);
-            InsertionBinaryTree.isRunning = false;
-            InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
+            tree.updateConnections(tree.root, 0);
+            tree.isRunning = false;
+            tree.moveView(tree.viewX());
         }
 
     }

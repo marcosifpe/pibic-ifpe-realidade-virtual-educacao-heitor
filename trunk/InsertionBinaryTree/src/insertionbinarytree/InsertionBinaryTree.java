@@ -17,6 +17,7 @@ import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.BoxLayout;
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -38,9 +39,10 @@ import sun.applet.Main;
 
 /**
  *
- * @author Heitor Paceli Maranhao email: heitorpaceli@gmail.com
+ * @author Heitor Paceli Maranhao 
+ * email: heitorpaceli@gmail.com
  */
-public class InsertionBinaryTree {
+public class InsertionBinaryTree extends JApplet {
 
     public static final String INSERTION_INFO = "Algoritmo de Inserção em Árvore Binária\n\n\n"
             + "   O algoritmo antes iniciar a inserção, verifica se o valor já inserido antes. "
@@ -66,7 +68,7 @@ public class InsertionBinaryTree {
             + "senão, verifica se o próximo nó a esquerda é um nó folha, se for troca o nó pelo próximo nó a direita, "
             + "senão, troca o valor do nó pelo valor do menor nó dos maiores (nó mais a esquerda, dentre os nós da direita), e remove o menor nó dos maiores.";
     public static final String LEFT_NEXT_MOV = "ESQUERDA", RIGHT_NEXT_MOV = "DIREITA";
-    private static SimpleUniverse universe;
+    private SimpleUniverse universe;
     public final static int TEXT_AREA_ROWS = 500,
             TEXT_AREA_COLUMNS = 353;
     private static final String newRow = "\n";
@@ -186,37 +188,25 @@ public class InsertionBinaryTree {
             + DELETE_ELSE + DELETE_EQUALS + DELETE_TEMP1 + DELETE_NODE_L + DELETE_DELETE1 + DELETE_L_LEAF + DELETE_TEMP2 + DELETE_NODE_R + DELETE_DELETE2
             + DELETE_ELSE2 + DELETE_FIND_SUBSTITUTE + DELETE_NODE_MIN + DELETE_TEMP_MIN + DELETE_MIN_RIGHT + DELETE_DEL_TEMP + "   }" + newRow + " }" + newRow + DELETE_RETURN + "}" + newRow + newRow + FIND_CODE;
     private static final int NUMBER_OF_VALUES = 15;
-    public static int capacity = NUMBER_OF_VALUES;
     public static final int LEFT = -1, RIGTH = 1;
-    public static Node3D root;
+    public Node3D root;
     final static float r = 0.1f;
-    public static ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 0;
-    public static JTextPane textPane;
-    public static TransformGroup searchHighlighter, removeHighlighter;
-    private static SimpleAttributeSet deafaultText = new SimpleAttributeSet();
-    private static SimpleAttributeSet highlightedText = new SimpleAttributeSet();
-    public static JButton insertButton;
-    private static JTextArea vars = new JTextArea();
-    private static JButton removeButton;
-    private static JButton searchButton;
-    public static boolean isRunning = false;
-    private static Vector3f[] viewPositions;
+    public ArrayList<Node3D> nodes = new ArrayList<Node3D>();
+    public static final int SLEEP_TIME = 40;
+    public JTextPane textPane;
+    public TransformGroup searchHighlighter, removeHighlighter;
+    private SimpleAttributeSet deafaultText = new SimpleAttributeSet();
+    private SimpleAttributeSet highlightedText = new SimpleAttributeSet();
+    public JButton insertButton;
+    private JTextArea vars = new JTextArea();
+    private JButton removeButton;
+    private JButton searchButton;
+    public boolean isRunning = false;
+    private Vector3f[] viewPositions;
     public static final float DISTANCE = r * 2;
     public static final int H_MAX = 3;
 
-    public static void main(String[] args) {
-        //Cor e background do texto não destacado
-        StyleConstants.setForeground(deafaultText, Color.black);
-        StyleConstants.setBackground(deafaultText, Color.white);
-        //Cor e background do texto destacado
-        StyleConstants.setForeground(highlightedText, Color.red);
-        StyleConstants.setBackground(highlightedText, Color.yellow);
-
-        JFrame frame = createFrame();
-    }
-
-    public static int viewLeft() {
+    public int viewLeft() {
         int contLeft = 0;
         Node3D node = root;
         //Calcula quantos nos estao a esquerda
@@ -229,7 +219,7 @@ public class InsertionBinaryTree {
         return contLeft;
     }
 
-    public static int viewRight() {
+    public int viewRight() {
         Node3D node = root;
         int contRight = 0;
         //Calcula quantos nos estao a direita
@@ -242,7 +232,7 @@ public class InsertionBinaryTree {
         return contRight;
     }
 
-    public static int viewX() {
+    public int viewX() {
         Node3D node = root;
         int contLeft = viewLeft();
         int contRight = viewRight();
@@ -254,7 +244,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static int prevViewX(int n) {
+    public int prevViewX(int n) {
         int lView = viewLeft();
         int rView = viewRight();
         int view = 0;
@@ -282,7 +272,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static Node3D insertValue(Node3D child, Node3D node, float distance) {
+    public Node3D insertValue(Node3D child, Node3D node, float distance) {
 
         updateInsertVars(child, node);
 
@@ -307,8 +297,6 @@ public class InsertionBinaryTree {
             sleep(SLEEP_TIME * 5);
             //System.out.println("Posicao setada");
             //--------------------------------
-
-            capacity--;
         } else if (child.getValue() == node.getValue()) {
             highlightsText(INSERT_EQUALS, INSERT_CODE);
             highlightsText(INSERT_ERROR, INSERT_CODE);
@@ -359,7 +347,7 @@ public class InsertionBinaryTree {
         return node;
     }
 
-    private static void createPositionsVector() {
+    private void createPositionsVector() {
         final int MAX_VIEW_POSITIONS = 5;
         viewPositions = new Vector3f[MAX_VIEW_POSITIONS];
 
@@ -387,11 +375,11 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static int getHBinaryTree() {
+    public int getHBinaryTree() {
         return getHBinaryTree(root);
     }
 
-    private static int getHBinaryTree(Node3D node) {
+    private int getHBinaryTree(Node3D node) {
         if (node == null) {
             return -1; // altura de árvore vazia é -1
         } else {
@@ -405,7 +393,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    private static JTextPane createTextPane(String code) {
+    private JTextPane createTextPane(String code) {
         StyledDocument style = new DefaultStyledDocument();
         JTextPane text = new JTextPane(style);
         text.setPreferredSize(new Dimension(TEXT_AREA_COLUMNS, TEXT_AREA_ROWS));
@@ -414,46 +402,46 @@ public class InsertionBinaryTree {
         return text;
     }
 
-    public static void clearHighlight(JTextPane pane, String code) {
+    public void clearHighlight(JTextPane pane, String code) {
         pane.getStyledDocument().setCharacterAttributes(0, code.length(), deafaultText, true);
     }
 
-    private static void searchAction() {
+    private void searchAction() {
         if (!isRunning) {
             isRunning = true;
-            SearchThread thread = new SearchThread("search");
+            SearchThread thread = new SearchThread("search", this);
             thread.start();
         }
     }
 
-    private static void removeAction() {
+    private void removeAction() {
         if (!isRunning) {
             isRunning = true;
-            RemoveThread thread = new RemoveThread("remove");
+            RemoveThread thread = new RemoveThread("remove", this);
             thread.start();
         }
     }
 
-    private static void insertAction() {
+    private void insertAction() {
         if (!isRunning) {
             isRunning = true;
-            InsertThread thread = new InsertThread("insert");
+            InsertThread thread = new InsertThread("insert", this);
             thread.start();
         }
     }
 
-    private static JFrame createFrame() {
-        JFrame frame = new JFrame("Binary Tree");
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private void createFrame() {
+        //JFrame frame = new JFrame("Binary Tree");
+        getContentPane().setLayout(new BorderLayout());
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JMenuBar menuBar = createMenuBar();
-        frame.setJMenuBar(menuBar);
+        this.setJMenuBar(menuBar);
 
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         //Onde sera mostrada a animacao
         Canvas3D canvas = new Canvas3D(config);
-        frame.getContentPane().add(BorderLayout.CENTER, canvas);
+        getContentPane().add(BorderLayout.CENTER, canvas);
 
         BranchGroup scene = createScene();
         universe = new SimpleUniverse(canvas);
@@ -516,20 +504,18 @@ public class InsertionBinaryTree {
         //
         panel.add(lowerPanel);
 
-        frame.getContentPane().add(BorderLayout.EAST, panel);
+        getContentPane().add(BorderLayout.EAST, panel);
         //
 
-        frame.setSize(800, 640);
-        frame.setVisible(true);
+        this.setSize(800, 640);
+        this.setVisible(true);
 
         OrbitBehavior ob = new OrbitBehavior(canvas);
         ob.setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE));
         universe.getViewingPlatform().setViewPlatformBehavior(ob);
-
-        return frame;
     }
 
-    public static void moveView(int i) {
+    public void moveView(int i) {
         Transform3D tfUniverse = new Transform3D();
         universe.getViewingPlatform().getViewPlatformTransform().getTransform(tfUniverse);
 
@@ -544,7 +530,7 @@ public class InsertionBinaryTree {
         universe.getViewingPlatform().getViewPlatformTransform().setTransform(tfUniverse);
     }
 
-    public static Node3D search(int num) {
+    public Node3D search(int num) {
         highlightMov(root, searchHighlighter);
         Node3D result = search(root, num);
         highlightMov(null, searchHighlighter);
@@ -552,7 +538,7 @@ public class InsertionBinaryTree {
         return result;
     }
 
-    private static Node3D search(Node3D node, int num) {
+    private Node3D search(Node3D node, int num) {
         String code = SEARCH_CODE;
         //----
         String varsText = "no = ";
@@ -596,7 +582,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static void highlightMov(Node3D node, TransformGroup highlighter) {
+    public void highlightMov(Node3D node, TransformGroup highlighter) {
         Transform3D tf = new Transform3D();
 
         sleep(SLEEP_TIME);
@@ -614,7 +600,7 @@ public class InsertionBinaryTree {
         //sleep(SLEEP_TIME * 20);
     }
 
-    private static BranchGroup createScene() {
+    private BranchGroup createScene() {
         BranchGroup scene = new BranchGroup();
 
         for (int i = 0; i < NUMBER_OF_VALUES; i++) {
@@ -631,18 +617,17 @@ public class InsertionBinaryTree {
         return scene;
     }
 
-    public static void insert(Node3D node, List<Integer> directions) {
+    public void insert(Node3D node, List<Integer> directions) {
         if (node != null) {
             node.moveToPosition(Object3DFactory.xInitial, Object3DFactory.yInitial, Object3DFactory.zInitial);
         }
         root = insert(node, root, directions);
     }
 
-    private static Node3D insert(Node3D child, Node3D node, List directions) {
+    private Node3D insert(Node3D child, Node3D node, List directions) {
         //armazena o movimento do no, no list directions
         if (node == null) {
             node = child;
-            capacity--;
         } else if (child.getValue() == node.getValue()) {
 //            throw new RuntimeException("Element already exists");
         } else if (child.getValue() < node.getValue()) {
@@ -663,7 +648,7 @@ public class InsertionBinaryTree {
         return node;
     }
 
-    public static Transform3D insert3D(Node3D node, final int direction, final float distance, boolean isRemove, TransformGroup highlighter) {
+    public Transform3D insert3D(Node3D node, final int direction, final float distance, boolean isRemove, TransformGroup highlighter) {
 
         TransformGroup tgNode = highlighter;
         Transform3D tfNode = new Transform3D();
@@ -715,7 +700,7 @@ public class InsertionBinaryTree {
         return tfNode;
     }
 
-    public static void insertValue(int num) {
+    public void insertValue(int num) {
         String varsText = "valor = " + num + newRow
                 + "raiz = " + ((root != null) ? root.getValue() : "null");
         vars.setText(varsText);
@@ -725,7 +710,7 @@ public class InsertionBinaryTree {
             highlightsText(INSERT1_ERROR, INSERT_CODE);
             JOptionPane.showMessageDialog(textPane, "O valor já foi inserido antes");
         } else {
-            capacity--;
+
             highlightsText(INSERT1_ELSE, INSERT_CODE);
             highlightsText(INSERT1_INSERT, INSERT_CODE);
             //startInsertValue(num);
@@ -762,7 +747,7 @@ public class InsertionBinaryTree {
         vars.setText("");
     }
 
-    public static boolean exists(int num, Node3D node) {
+    public boolean exists(int num, Node3D node) {
         if (node == null) {
             return false;
         } else if (node.getValue() == num) {
@@ -775,7 +760,7 @@ public class InsertionBinaryTree {
 
     }
 
-    public static void addLight(SimpleUniverse su) {
+    public void addLight(SimpleUniverse su) {
 
         BranchGroup bgLight = new BranchGroup();
 
@@ -791,7 +776,7 @@ public class InsertionBinaryTree {
 
     }
 
-    public static void sleep(long sleepTime) {
+    public void sleep(long sleepTime) {
         //Deixa a animacao mais lenta para que se possar ver
         try {
             Thread.sleep(sleepTime);
@@ -800,7 +785,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static void highlightsText(String string, String code) {
+    public void highlightsText(String string, String code) {
         //Remove destaques
         textPane.getStyledDocument().setCharacterAttributes(0, code.length(), deafaultText, true);
         int i = code.indexOf(string);
@@ -808,7 +793,7 @@ public class InsertionBinaryTree {
         sleep(SLEEP_TIME * 30);
     }
 
-    public static void delete(int element, Node3D node) {
+    public void delete(int element, Node3D node) {
         sleep(SLEEP_TIME * 3);
         //variaveis que serão mostradas no painel lateral
         String left, right, nodeValue;
@@ -933,7 +918,7 @@ public class InsertionBinaryTree {
         vars.setText("");
     }
 
-    public static void resetNode(Node3D node, boolean add) {
+    public void resetNode(Node3D node, boolean add) {
         if (node != null) {
             node.setValue(0);
 
@@ -953,12 +938,12 @@ public class InsertionBinaryTree {
 
             if (add) {
                 nodes.add(node);
-                capacity++;
+
             }
         }
     }
 
-    public static void reinsert(ArrayList<Node3D> nodesToInsert) {
+    public void reinsert(ArrayList<Node3D> nodesToInsert) {
         List<Integer> directions = new ArrayList();
         for (int j = 0; j < nodesToInsert.size(); j++) {
             Node3D node = nodesToInsert.get(j);
@@ -1003,7 +988,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static void updateConnections(Node3D node, int h) {
+    public void updateConnections(Node3D node, int h) {
 
         if (node != null) {
 
@@ -1022,7 +1007,7 @@ public class InsertionBinaryTree {
 
     }
 
-    private static void removeNode(Node3D node) {
+    private void removeNode(Node3D node) {
         node.hideNode(node);
         ArrayList<Node3D> nodesReinsert = node.getAllNodes(node);
 
@@ -1044,7 +1029,7 @@ public class InsertionBinaryTree {
         reinsert(nodesReinsert);
     }
 
-    private static Node3D findSubstitute(Node3D node, boolean highlight) {
+    private Node3D findSubstitute(Node3D node, boolean highlight) {
         if (node != null) {
             if (highlight) {
                 String varsText = "no = " + node.getValue() + newRow;
@@ -1073,7 +1058,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    public static void nextMovement(String correct) {
+    public void nextMovement(String correct) {
         int answer;
         String[] options = {LEFT_NEXT_MOV, RIGHT_NEXT_MOV};
         boolean repeatQuestion = false;
@@ -1097,7 +1082,7 @@ public class InsertionBinaryTree {
     }
 
     //Pergunta qual é o nó substituto
-    private static void whatIsSubstitute(Node3D node) {
+    private void whatIsSubstitute(Node3D node) {
         //Node3D substitute = findSubstitute(node.getRight(), null, false);
         Node3D substitute = findSubstitute(node.getRight(), false);
 
@@ -1135,7 +1120,7 @@ public class InsertionBinaryTree {
     }
 
     //Esta funcao embaralha um vetor
-    private static void swapPositions(Integer[] vector) {
+    private void swapPositions(Integer[] vector) {
         //Quantidade de vezes que vai trocar posições
         int loop = (int) (Math.random() * 20);
         for (int j = 0; j < loop; j++) {
@@ -1152,7 +1137,7 @@ public class InsertionBinaryTree {
 
     }
 
-    static void updateInsertButton() {
+    void updateInsertButton() {
         if (nodes.size() > 0 && insertButton != null) {
             insertButton.setEnabled(true);
         } else {
@@ -1162,7 +1147,7 @@ public class InsertionBinaryTree {
         }
     }
 
-    private static void setRemoveVars(int element, String node, String left, String right, String temp) {
+    private void setRemoveVars(int element, String node, String left, String right, String temp) {
         String varsText = "valor = " + element + newRow
                 + "no = " + node + newRow
                 + "no.esquerda = " + left + newRow
@@ -1175,13 +1160,13 @@ public class InsertionBinaryTree {
         sleep(SLEEP_TIME);
     }
 
-    private static void showHighlighter(TransformGroup highlighter) {
+    private void showHighlighter(TransformGroup highlighter) {
         Transform3D tfInitial = new Transform3D();
         tfInitial.setTranslation(new Vector3f(0.0f, Object3DFactory.yInitial, 0.0f));
         highlighter.setTransform(tfInitial);
     }
 
-    private static void updateInsertVars(Node3D child, Node3D node) {
+    private void updateInsertVars(Node3D child, Node3D node) {
         String varsText = "valor = " + ((child != null) ? child.getValue() : "null") + newRow;
         if (node == null) {
             varsText += "no = null\nno.esquerda = null\nno.direita = null";
@@ -1193,7 +1178,7 @@ public class InsertionBinaryTree {
         vars.setText(varsText);
     }
 
-    private static JMenuBar createMenuBar() {
+    private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Explicações");
         menu.setMnemonic(KeyEvent.VK_ALT);
@@ -1230,7 +1215,18 @@ public class InsertionBinaryTree {
         return menuBar;
     }
 
-    private static void showInfo(String title, String info) {
+    public void init() {
+        //Cor e background do texto não destacado
+        StyleConstants.setForeground(deafaultText, Color.black);
+        StyleConstants.setBackground(deafaultText, Color.white);
+        //Cor e background do texto destacado
+        StyleConstants.setForeground(highlightedText, Color.red);
+        StyleConstants.setBackground(highlightedText, Color.yellow);
+
+        createFrame();
+    }
+
+    private void showInfo(String title, String info) {
         JFrame frame = new JFrame(title);
         frame.setSize(TEXT_AREA_COLUMNS, TEXT_AREA_ROWS);
         frame.setResizable(false);
@@ -1246,7 +1242,7 @@ public class InsertionBinaryTree {
         frame.setAlwaysOnTop(true);
     }
 
-    public static int getNodeHeight(Node3D node) {
+    public int getNodeHeight(Node3D node) {
         int h = -1;
         if (node != null) {
             //Enquanto node nao for o root
@@ -1258,7 +1254,7 @@ public class InsertionBinaryTree {
         return h;
     }
 
-    public static int prevNodeHeight(int n) {
+    public int prevNodeHeight(int n) {
         int cont = 1;
         Node3D node = root;
 

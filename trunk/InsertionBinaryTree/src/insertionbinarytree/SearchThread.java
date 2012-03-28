@@ -13,9 +13,11 @@ import javax.swing.JOptionPane;
  * email: heitorpaceli@gmail.com
  */
 public class SearchThread extends Thread {
+    private final InsertionBinaryTree tree;
 
-    public SearchThread(String name) {
+    public SearchThread(String name, InsertionBinaryTree tree) {
         super(name);
+        this.tree = tree;
     }
 
     @Override
@@ -25,19 +27,19 @@ public class SearchThread extends Thread {
 
     private void search() {
         try {
-            InsertionBinaryTree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
-            InsertionBinaryTree.textPane.setText(InsertionBinaryTree.SEARCH_CODE);
-            String numString = JOptionPane.showInputDialog(InsertionBinaryTree.textPane, "Qual elemento deseja buscar?");
+            tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
+            tree.textPane.setText(InsertionBinaryTree.SEARCH_CODE);
+            String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja buscar?");
             int num = Integer.parseInt(numString);
-            InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
-            Node3D result = InsertionBinaryTree.search(num);
+            tree.moveView(tree.viewX());
+            Node3D result = tree.search(num);
 
             String message = (result != null) ? "Valor encontrado" : "Valor não encontrado";
-            JOptionPane.showMessageDialog(InsertionBinaryTree.textPane, message);
-            InsertionBinaryTree.clearHighlight(InsertionBinaryTree.textPane, InsertionBinaryTree.SEARCH_CODE);
+            JOptionPane.showMessageDialog(tree.textPane, message);
+            tree.clearHighlight(tree.textPane, InsertionBinaryTree.SEARCH_CODE);
         } finally {
-            InsertionBinaryTree.isRunning = false;
-            //InsertionBinaryTree.moveView();
+            tree.isRunning = false;
+            //Insertiontree.moveView();
         }
     }
 }
