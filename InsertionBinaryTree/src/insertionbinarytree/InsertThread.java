@@ -45,6 +45,7 @@ public class InsertThread extends Thread {
                 InsertionBinaryTree.updateInsertButton();
             }
         } finally {
+            InsertionBinaryTree.updateConnections(InsertionBinaryTree.root);
             InsertionBinaryTree.isRunning = false;
             InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
         }

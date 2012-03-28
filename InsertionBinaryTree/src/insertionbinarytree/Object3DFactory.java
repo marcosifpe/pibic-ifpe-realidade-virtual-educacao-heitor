@@ -99,7 +99,7 @@ public class Object3DFactory {
 
         node.setText3D(text3d);
         node.setTgNode(tgNode);
-
+/*
         Transform3D tfLeftLeaf = new Transform3D();
         //esconde a folha
         tfLeftLeaf.setTranslation(new Vector3f(999, 999, 999));
@@ -125,13 +125,13 @@ public class Object3DFactory {
         node.setRightLeaf(tgRightLeaf);
         //node.getTgNode().addChild(tgLeftLeaf);
         //node.getTgNode().addChild(tgRightLeaf);
-
+*/
         node.hideNode(node);
         calculateConnections(node);
         return node;
     }
 
-    public static void calculateConnections(Node3D node) {
+    public void calculateConnections(Node3D node) {
         //float d = distance/5/dist;
 
         float distance = InsertionBinaryTree.DISTANCE / 5;
@@ -194,10 +194,26 @@ public class Object3DFactory {
     }
     public static int HIDE = 999;
 
-    private static TransformGroup createNodeConnection(double hypot, double angle, boolean rotY) {
+    private TransformGroup createNodeConnection(double hypot, double angle, boolean rotY) {
         Color brown = new Color(139, 69, 19);
         Appearance app = getInstance().createAppearance(brown, true);
         Box box = new Box(0.02f, (float) hypot / 2, 0.02f, app);
+        
+        
+        //-----------------------------
+        
+        Transform3D tfLeaf = new Transform3D();
+        //esconde a folha
+        tfLeaf.setTranslation(new Vector3f(0.0f, -(float) hypot - (leafSize/2), 0.0f));
+        TransformGroup tgLeaf = new TransformGroup(tfLeaf);
+        tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        tgLeaf.setTransform(tfLeaf);
+        Box leaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false));
+        tgLeaf.addChild(leaf);
+        
+        //-----------------------------
+        
 
         Transform3D tf = new Transform3D();
         Transform3D tfBox = new Transform3D();
@@ -220,6 +236,7 @@ public class Object3DFactory {
         tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
         tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         tg.addChild(tgBox);
+        tg.addChild(tgLeaf);
         return tg;
     }
 
