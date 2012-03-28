@@ -100,15 +100,21 @@ public class Node3D {
     }
 
     public void hideLeftLeaf() {
+        /*
         Transform3D tfLeftLeaf = new Transform3D();
         tfLeftLeaf.setTranslation(new Vector3f(999, 999, 999));
         LEFT_LEAF.setTransform(tfLeftLeaf);
+        * 
+        */
     }
 
     public void hideRightLeaf() {
+        /*
         Transform3D tfRightLeaf = new Transform3D();
         tfRightLeaf.setTranslation(new Vector3f(999, 999, 999));
         RIGHT_LEAF.setTransform(tfRightLeaf);
+        * 
+        */
     }
 
     public void showLeftLeaf() {

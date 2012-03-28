@@ -32,10 +32,8 @@ public class RemoveThread extends Thread {
             InsertionBinaryTree.delete(num, InsertionBinaryTree.root);
             InsertionBinaryTree.clearHighlight(InsertionBinaryTree.textPane, InsertionBinaryTree.DELETE_CODE);
             InsertionBinaryTree.updateInsertButton();
-            System.out.println("Vai chamar");
-            InsertionBinaryTree.updateConnections(InsertionBinaryTree.root);
-            System.out.println("chamou");
         } finally {
+            InsertionBinaryTree.updateConnections(InsertionBinaryTree.root);
             InsertionBinaryTree.isRunning = false;
             InsertionBinaryTree.moveView(InsertionBinaryTree.viewX());
         }

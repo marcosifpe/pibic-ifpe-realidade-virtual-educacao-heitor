@@ -2,10 +2,7 @@ package insertionbinarytree;
 
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -194,7 +191,7 @@ public class InsertionBinaryTree {
     public static Node3D root;
     final static float r = 0.1f;
     public static ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public static JTextPane textPane;
     public static TransformGroup searchHighlighter, removeHighlighter;
     private static SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -219,7 +216,7 @@ public class InsertionBinaryTree {
         JFrame frame = createFrame();
     }
 
-    public static int viewLeft(){
+    public static int viewLeft() {
         int contLeft = 0;
         Node3D node = root;
         //Calcula quantos nos estao a esquerda
@@ -231,8 +228,8 @@ public class InsertionBinaryTree {
         }
         return contLeft;
     }
-    
-    public static int viewRight(){
+
+    public static int viewRight() {
         Node3D node = root;
         int contRight = 0;
         //Calcula quantos nos estao a direita
@@ -244,12 +241,12 @@ public class InsertionBinaryTree {
         }
         return contRight;
     }
-    
+
     public static int viewX() {
-        Node3D node =root;
+        Node3D node = root;
         int contLeft = viewLeft();
         int contRight = viewRight();
-        
+
         if (contLeft > contRight) {
             return contLeft;
         } else {
@@ -260,24 +257,24 @@ public class InsertionBinaryTree {
     public static int prevViewX(int n) {
         int lView = viewLeft();
         int rView = viewRight();
-        int view=0;
-        
+        int view = 0;
+
         if (root != null) {
-            if(n < root.minNode().getValue()){
-                if(lView+1 > rView){
-                    view = lView+1;
-                }else{
+            if (n < root.minNode().getValue()) {
+                if (lView + 1 > rView) {
+                    view = lView + 1;
+                } else {
                     view = rView;
                 }
                 return view;
-            }else if(n > root.maxNode().getValue()){
-                if(rView+1 > lView){
-                    view = rView+1;
-                }else{
+            } else if (n > root.maxNode().getValue()) {
+                if (rView + 1 > lView) {
+                    view = rView + 1;
+                } else {
                     view = lView;
                 }
                 return view;
-            }else{
+            } else {
                 return viewX();
             }
         } else {
@@ -477,6 +474,8 @@ public class InsertionBinaryTree {
         //frame.getContentPane().add(BorderLayout.EAST, textPane);
 
         vars.setEditable(false);
+
+        JPanel lowerPanel = new JPanel(new GridLayout(3, 1));
         panel.add(vars);
 
         insertButton = new JButton("Inserir número");
@@ -488,7 +487,7 @@ public class InsertionBinaryTree {
         });
 
         //frame.getContentPane().add(BorderLayout.SOUTH, insertButton);
-        panel.add(insertButton);
+        lowerPanel.add(insertButton);
 
         searchButton = new JButton("Buscar número");
 
@@ -499,7 +498,7 @@ public class InsertionBinaryTree {
             }
         });
         //frame.getContentPane().add(BorderLayout.SOUTH, searchButton);
-        panel.add(searchButton);
+        lowerPanel.add(searchButton);
 
         removeButton = new JButton("Remover número");
         removeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -508,9 +507,9 @@ public class InsertionBinaryTree {
                 removeAction();
             }
         });
-        panel.add(removeButton);
+        lowerPanel.add(removeButton);
         //
-
+        panel.add(lowerPanel);
 
         frame.getContentPane().add(BorderLayout.EAST, panel);
         //
@@ -619,7 +618,7 @@ public class InsertionBinaryTree {
             nodes.add(node3D);
             scene.addChild(node3D.getTgNode());
         }
-        searchHighlighter = Object3DFactory.getInstance().getHighlighter(Color.red);
+        searchHighlighter = Object3DFactory.getInstance().getHighlighter(Color.WHITE);
         removeHighlighter = Object3DFactory.getInstance().getHighlighter(Color.blue);
         scene.addChild(removeHighlighter);
         scene.addChild(searchHighlighter);
@@ -1000,31 +999,23 @@ public class InsertionBinaryTree {
     }
 
     public static void updateConnections(Node3D node) {
-        System.out.println("update");
+
         if (node != null) {
 
             Node3D left = node.getLeft();
             Node3D right = node.getRight();
             int h = getNodeHeight(node) + 1;
 
-            if (left == null) {
-                node.hideLConnection();
-            } else {
-                System.out.println("esconde esquerda");
-                node.hideLConnection();
-                node.showLConnection(h);
-                updateConnections(left);
-            }
+            node.hideLConnection();
+            node.showLConnection(h);
+            updateConnections(left);
 
-            if (right == null) {
-                node.hideRConnection();
-            } else {
-                System.out.println("esconde direita");
-                node.hideRConnection();
-                node.showRConnection(h);
-                updateConnections(right);
-            }
+            node.hideRConnection();
+            node.showRConnection(h);
+            updateConnections(right);
+
         }
+
     }
 
     private static void removeNode(Node3D node) {
