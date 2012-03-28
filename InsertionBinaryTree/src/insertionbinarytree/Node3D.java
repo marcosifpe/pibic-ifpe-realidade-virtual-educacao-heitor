@@ -27,12 +27,14 @@ public class Node3D {
     private Transform3D R_CON_TF[], L_CON_TF[];
     private Node3D parent;
     private Transform3D tfHide;
+    public final int NUM_CONNECTIONS = InsertionBinaryTree.H_MAX+1;
 
     public Node3D() {
-        R_CON = new TransformGroup[InsertionBinaryTree.H_MAX];
-        L_CON = new TransformGroup[InsertionBinaryTree.H_MAX];
-        L_CON_TF = new Transform3D[InsertionBinaryTree.H_MAX];
-        R_CON_TF = new Transform3D[InsertionBinaryTree.H_MAX];
+        
+        R_CON = new TransformGroup[NUM_CONNECTIONS];
+        L_CON = new TransformGroup[NUM_CONNECTIONS];
+        L_CON_TF = new Transform3D[NUM_CONNECTIONS];
+        R_CON_TF = new Transform3D[NUM_CONNECTIONS];
         tfHide = new Transform3D();
         tfHide.setTranslation(new Vector3f(999, 999, 999));
     }

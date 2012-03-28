@@ -135,7 +135,7 @@ public class Object3DFactory {
         //float d = distance/5/dist;
 
         float distance = InsertionBinaryTree.DISTANCE / 5;
-        for (int i = 0; i < InsertionBinaryTree.H_MAX; i++) {
+        for (int i = 0; i < node.NUM_CONNECTIONS; i++) {
             float x = 0, y = yInitial;
             float cont = 0.0f;
             float d = InsertionBinaryTree.DISTANCE / 5 / distance;
@@ -185,10 +185,6 @@ public class Object3DFactory {
             node.getTgNode().addChild(left);
             node.getTgNode().addChild(right);
 
-            //node.hideLConnection();
-            //node.hideRConnection();
-
-            //System.out.println("x = " + x + " y = " + y);
             distance /= 2;
         }
     }
