@@ -17,7 +17,8 @@ import javax.vecmath.Vector3f;
 
 /**
  *
- * @author Heitor
+ * @author Heitor Paceli Maranhao
+ * email: heitorpaceli@gmail.com
  */
 public class Object3DFactory {
 

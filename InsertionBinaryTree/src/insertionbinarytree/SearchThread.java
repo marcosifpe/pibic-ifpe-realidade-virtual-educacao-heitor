@@ -9,7 +9,8 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author heitor
+ * @author Heitor Paceli Maranhao
+ * email: heitorpaceli@gmail.com
  */
 public class SearchThread extends Thread {
 
