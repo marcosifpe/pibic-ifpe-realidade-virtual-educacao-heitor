@@ -272,7 +272,7 @@ public class InsertionBinaryTree extends JApplet {
         }
     }
 
-    public Node3D insertValue(Node3D child, Node3D node, float distance) {
+    public Node3D insertValue(Node3D child, Node3D node, float distance, Score score) {
 
         updateInsertVars(child, node);
 
@@ -307,7 +307,7 @@ public class InsertionBinaryTree extends JApplet {
 
             //textPane.getStyledDocument().setCharacterAttributes(0, INSERT_CODE.length(), deafaultText, true);
 
-            nextMovement(LEFT_NEXT_MOV);
+            nextMovement(LEFT_NEXT_MOV, score);
 
             highlightsText(INSERT_LOWER, INSERT_CODE);
             highlightsText(INSERT_LEFT, INSERT_CODE);
@@ -320,14 +320,14 @@ public class InsertionBinaryTree extends JApplet {
 
             //mostra a animacao
             insert3D(child, LEFT, distance / 5, false, searchHighlighter);
-            node.setLeft(insertValue(child, node.getLeft(), distance / 2));
+            node.setLeft(insertValue(child, node.getLeft(), distance / 2, score));
 
         } else if (child.getValue() > node.getValue()) {
             highlightsText(INSERT_EQUALS, INSERT_CODE);
 
             //textPane.getStyledDocument().setCharacterAttributes(0, INSERT_CODE.length(), deafaultText, true);
 
-            nextMovement(RIGHT_NEXT_MOV);
+            nextMovement(RIGHT_NEXT_MOV, score);
 
             highlightsText(INSERT_LOWER, INSERT_CODE);
             highlightsText(INSERT_GREATER, INSERT_CODE);
@@ -341,7 +341,7 @@ public class InsertionBinaryTree extends JApplet {
 
             //mostra a animacao
             insert3D(child, RIGTH, distance / 5, false, searchHighlighter);
-            node.setRight(insertValue(child, node.getRight(), distance / 2));
+            node.setRight(insertValue(child, node.getRight(), distance / 2,score));
         }
         highlightsText(INSERT_RETURN, INSERT_CODE);
         return node;
@@ -532,13 +532,15 @@ public class InsertionBinaryTree extends JApplet {
 
     public Node3D search(int num) {
         highlightMov(root, searchHighlighter);
-        Node3D result = search(root, num);
+        Score score = new Score();
+        Node3D result = search(root, num, score);
         highlightMov(null, searchHighlighter);
         vars.setText(" ");
+        score.show(textPane);
         return result;
     }
 
-    private Node3D search(Node3D node, int num) {
+    private Node3D search(Node3D node, int num, Score score) {
         String code = SEARCH_CODE;
         //----
         String varsText = "no = ";
@@ -564,7 +566,7 @@ public class InsertionBinaryTree extends JApplet {
             return node;
         }
         String mov = (num < node.getValue()) ? LEFT_NEXT_MOV : RIGHT_NEXT_MOV;
-        nextMovement(mov);
+        nextMovement(mov, score);
 
         highlightsText(SEARCH_LOWER, code);
 
@@ -572,13 +574,13 @@ public class InsertionBinaryTree extends JApplet {
             highlightsText(SEARCH_LEFT, code);
             highlightMov(node.getLeft(), searchHighlighter);
 
-            return search(node.getLeft(), num);
+            return search(node.getLeft(), num, score);
         } else {
             highlightsText(SEARCH_ELSE, code);
             highlightsText(SEARCH_RIGHT, code);
             highlightMov(node.getRight(), searchHighlighter);
 
-            return search(node.getRight(), num);
+            return search(node.getRight(), num, score);
         }
     }
 
@@ -728,7 +730,8 @@ public class InsertionBinaryTree extends JApplet {
 
                 node.moveToPosition(Object3DFactory.xInitial, Object3DFactory.yInitial, Object3DFactory.zInitial);
 
-                root = insertValue(node, root, r * 2);
+                Score score = new Score();
+                root = insertValue(node, root, r * 2, score);
 
                 int nodeH = getNodeHeight(node);
                 Node3D parent = node.getParent();
@@ -742,9 +745,12 @@ public class InsertionBinaryTree extends JApplet {
 
                 sleep(SLEEP_TIME * 3);
                 highlightMov(null, searchHighlighter);
+                vars.setText("");
+                score.show(textPane);
             }
         }
         vars.setText("");
+        
     }
 
     public boolean exists(int num, Node3D node) {
@@ -793,7 +799,7 @@ public class InsertionBinaryTree extends JApplet {
         sleep(SLEEP_TIME * 30);
     }
 
-    public void delete(int element, Node3D node) {
+    public void delete(int element, Node3D node, Score score) {
         sleep(SLEEP_TIME * 3);
         //variaveis que serão mostradas no painel lateral
         String left, right, nodeValue;
@@ -820,21 +826,21 @@ public class InsertionBinaryTree extends JApplet {
             //Se ainda não encontrou o elemento pergunta qual é o próximo movimento
             if (element != node.getValue()) {
                 String answer = (element < node.getValue()) ? LEFT_NEXT_MOV : RIGHT_NEXT_MOV;
-                nextMovement(answer);
+                nextMovement(answer, score);
             }
             highlightsText(DELETE_LOWER, DELETE_CODE);
             if (element < node.getValue()) {
 
                 highlightsText(DELETE_LEFT, DELETE_CODE);
 
-                delete(element, node.getLeft());
+                delete(element, node.getLeft(), score);
 
             } else if (element > node.getValue()) {
 
                 highlightsText(DELETE_GREATER, DELETE_CODE);
                 highlightsText(DELETE_RIGHT, DELETE_CODE);
 
-                delete(element, node.getRight());
+                delete(element, node.getRight(), score);
             } else {
 
                 highlightsText(DELETE_GREATER, DELETE_CODE);
@@ -1058,10 +1064,11 @@ public class InsertionBinaryTree extends JApplet {
         }
     }
 
-    public void nextMovement(String correct) {
+    public void nextMovement(String correct, Score score) {
         int answer;
         String[] options = {LEFT_NEXT_MOV, RIGHT_NEXT_MOV};
         boolean repeatQuestion = false;
+        int cont = 0;
 
         do {
             answer = JOptionPane.showOptionDialog(textPane, "Qual é o próximo movimento?", "Pergunta",
@@ -1070,15 +1077,24 @@ public class InsertionBinaryTree extends JApplet {
             //se a janela for fechada
             if (answer == -1) {
                 repeatQuestion = true;
-            } else {
+            } else { //se errou
                 if (options[answer] == null ? correct != null : !options[answer].equals(correct)) {
+                    
                     JOptionPane.showMessageDialog(textPane, "Resposta incorreta!");
                     repeatQuestion = true;
-                } else {
+                } else { //se acertou
+                    
                     repeatQuestion = false;
                 }
             }
+            cont++;
         } while (repeatQuestion);
+        if(cont == 1){
+            score.addCorrect();
+            score.addTotal();
+        }else{
+            score.addTotal();
+        }
     }
 
     //Pergunta qual é o nó substituto
@@ -1269,5 +1285,11 @@ public class InsertionBinaryTree extends JApplet {
             }
         }
         return cont;
+    }
+
+    void delete(int num) {
+        Score score = new Score();
+        delete(num, root, score);
+        score.show(textPane);
     }
 }

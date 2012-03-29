@@ -32,7 +32,8 @@ public class RemoveThread extends Thread {
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja Remover?");
             int num = Integer.parseInt(numString);
             //Insertiontree.remove(num);
-            tree.delete(num, tree.root);
+            //tree.delete(num, tree.root);
+            tree.delete(num);
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
             tree.updateInsertButton();
         } finally {
