@@ -23,7 +23,7 @@ import javax.vecmath.Vector3f;
 public class Object3DFactory {
 
     private static Object3DFactory instance;
-    public static float leafSize = 0.04f;
+    public static float leafSize = InsertionBinaryTree.r/3;
     public static float yInitial = 0.5f, xInitial = InsertionBinaryTree.r * -7, zInitial = 0.0f;
     private float highlighterH = 0.1f;
     private float highlighterR = InsertionBinaryTree.r + 0.02f;

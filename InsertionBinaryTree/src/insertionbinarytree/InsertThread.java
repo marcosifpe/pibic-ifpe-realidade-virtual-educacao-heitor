@@ -26,6 +26,7 @@ public class InsertThread extends Thread {
     }
 
     private void insert() {
+        Score score = null;
         try {
             //InsertionBinaryTree.moveView(InsertionBinaryTree.viewX() + 1);
             
@@ -43,15 +44,17 @@ public class InsertThread extends Thread {
                         + "não é permitido\n que a altura seja maior que " + hMax, "Altura máxima", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 tree.moveView(tree.prevViewX(num));
-                tree.insertValue(num);
+                score = tree.insertValue(num);
                 tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
                 tree.updateInsertButton();
             }
         } finally {
             tree.updateConnections(tree.root, 0);
-            tree.isRunning = false;
             tree.moveView(tree.viewX());
+            if(score!=null){
+                score.show(tree.textPane);
+            }
+            tree.isRunning = false;
         }
-
     }
 }
