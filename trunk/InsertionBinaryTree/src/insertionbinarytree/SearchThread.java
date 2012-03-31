@@ -26,20 +26,23 @@ public class SearchThread extends Thread {
     }
 
     private void search() {
+        Score score = null;
         try {
             tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
             tree.textPane.setText(InsertionBinaryTree.SEARCH_CODE);
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja buscar?");
             int num = Integer.parseInt(numString);
             tree.moveView(tree.viewX());
-            Node3D result = tree.search(num);
+            score = tree.search(num);
 
-            String message = (result != null) ? "Valor encontrado" : "Valor não encontrado";
-            JOptionPane.showMessageDialog(tree.textPane, message);
-            tree.clearHighlight(tree.textPane, InsertionBinaryTree.SEARCH_CODE);
+            
         } finally {
+            tree.clearHighlight(tree.textPane, InsertionBinaryTree.SEARCH_CODE);
+            tree.moveView(tree.viewX());
+            if(score != null){
+                score.show(tree.textPane);
+            }
             tree.isRunning = false;
-            //Insertiontree.moveView();
         }
     }
 }

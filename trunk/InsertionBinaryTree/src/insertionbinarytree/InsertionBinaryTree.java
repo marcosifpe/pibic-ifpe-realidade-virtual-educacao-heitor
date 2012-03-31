@@ -42,7 +42,7 @@ import sun.applet.Main;
  * @author Heitor Paceli Maranhao 
  * email: heitorpaceli@gmail.com
  */
-public class InsertionBinaryTree extends JApplet {
+public class InsertionBinaryTree {
 
     public static final String INSERTION_INFO = "Algoritmo de Inserção em Árvore Binária\n\n\n"
             + "   O algoritmo antes iniciar a inserção, verifica se o valor já inserido antes. "
@@ -281,8 +281,6 @@ public class InsertionBinaryTree extends JApplet {
 
         if (node == null) {
             node = child;
-
-            //--------------------------------
             //Move para a posicao correta
             Transform3D tf = new Transform3D();
             searchHighlighter.getTransform(tf);
@@ -290,22 +288,13 @@ public class InsertionBinaryTree extends JApplet {
             highlightsText(INSERT_NEW_VALUE, INSERT_CODE);
             child.getTgNode().setTransform(tf);
 
-            child.showLeftLeaf();
-            child.showRightLeaf();
-
             updateInsertVars(child, node);
             sleep(SLEEP_TIME * 5);
-            //System.out.println("Posicao setada");
-            //--------------------------------
         } else if (child.getValue() == node.getValue()) {
             highlightsText(INSERT_EQUALS, INSERT_CODE);
             highlightsText(INSERT_ERROR, INSERT_CODE);
-
-//            throw new RuntimeException("Element already exists");
         } else if (child.getValue() < node.getValue()) {
             highlightsText(INSERT_EQUALS, INSERT_CODE);
-
-            //textPane.getStyledDocument().setCharacterAttributes(0, INSERT_CODE.length(), deafaultText, true);
 
             nextMovement(LEFT_NEXT_MOV, score);
 
@@ -315,7 +304,6 @@ public class InsertionBinaryTree extends JApplet {
             if (node.getLeft() == null) {
                 //System.out.println("setado");
                 child.setParent(node);
-                node.hideLeftLeaf();
             }
 
             //mostra a animacao
@@ -336,7 +324,6 @@ public class InsertionBinaryTree extends JApplet {
             if (node.getRight() == null) {
                 //System.out.println("setado");
                 child.setParent(node);
-                node.hideRightLeaf();
             }
 
             //mostra a animacao
@@ -431,17 +418,18 @@ public class InsertionBinaryTree extends JApplet {
     }
 
     private void createFrame() {
-        //JFrame frame = new JFrame("Binary Tree");
-        getContentPane().setLayout(new BorderLayout());
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame("Binary Tree");
+        Container contentPane = frame.getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JMenuBar menuBar = createMenuBar();
-        this.setJMenuBar(menuBar);
+        frame.setJMenuBar(menuBar);
 
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         //Onde sera mostrada a animacao
         Canvas3D canvas = new Canvas3D(config);
-        getContentPane().add(BorderLayout.CENTER, canvas);
+        contentPane.add(BorderLayout.CENTER, canvas);
 
         BranchGroup scene = createScene();
         universe = new SimpleUniverse(canvas);
@@ -504,11 +492,11 @@ public class InsertionBinaryTree extends JApplet {
         //
         panel.add(lowerPanel);
 
-        getContentPane().add(BorderLayout.EAST, panel);
+        contentPane.add(BorderLayout.EAST, panel);
         //
 
-        this.setSize(800, 640);
-        this.setVisible(true);
+        frame.setSize(800, 640);
+        frame.setVisible(true);
 
         OrbitBehavior ob = new OrbitBehavior(canvas);
         ob.setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE));
@@ -530,14 +518,17 @@ public class InsertionBinaryTree extends JApplet {
         universe.getViewingPlatform().getViewPlatformTransform().setTransform(tfUniverse);
     }
 
-    public Node3D search(int num) {
+    public Score search(int num) {
         highlightMov(root, searchHighlighter);
         Score score = new Score();
         Node3D result = search(root, num, score);
         highlightMov(null, searchHighlighter);
         vars.setText(" ");
         score.show(textPane);
-        return result;
+        
+        String message = (result != null) ? "Valor encontrado" : "Valor não encontrado";
+        JOptionPane.showMessageDialog(textPane, message);
+        return score;
     }
 
     private Node3D search(Node3D node, int num, Score score) {
@@ -702,7 +693,8 @@ public class InsertionBinaryTree extends JApplet {
         return tfNode;
     }
 
-    public void insertValue(int num) {
+    public Score insertValue(int num) {
+        Score score = null;
         String varsText = "valor = " + num + newRow
                 + "raiz = " + ((root != null) ? root.getValue() : "null");
         vars.setText(varsText);
@@ -719,7 +711,7 @@ public class InsertionBinaryTree extends JApplet {
             Node3D node = nodes.remove(0);
 
             if (node == null) {
-                return;
+                return null;
             } else {
                 resetNode(node, false);
                 node.setAutoUpdateText(true);
@@ -730,7 +722,7 @@ public class InsertionBinaryTree extends JApplet {
 
                 node.moveToPosition(Object3DFactory.xInitial, Object3DFactory.yInitial, Object3DFactory.zInitial);
 
-                Score score = new Score();
+                score = new Score();
                 root = insertValue(node, root, r * 2, score);
 
                 int nodeH = getNodeHeight(node);
@@ -745,12 +737,10 @@ public class InsertionBinaryTree extends JApplet {
 
                 sleep(SLEEP_TIME * 3);
                 highlightMov(null, searchHighlighter);
-                vars.setText("");
-                score.show(textPane);
             }
         }
         vars.setText("");
-        
+        return score;
     }
 
     public boolean exists(int num, Node3D node) {
@@ -928,9 +918,6 @@ public class InsertionBinaryTree extends JApplet {
         if (node != null) {
             node.setValue(0);
 
-            node.hideLeftLeaf();
-            node.hideRightLeaf();
-
             node.hideNode(node);
 
             node.setLeft(null);
@@ -977,19 +964,7 @@ public class InsertionBinaryTree extends JApplet {
             sleep(SLEEP_TIME * 3);
             highlightMov(null, searchHighlighter);
             highlightMov(null, removeHighlighter);
-
-
-            node.showLeftLeaf();
-            node.showRightLeaf();
-            //recupera o no pai, se nao for nulo esconde o no folha do lado que o novo no foi inserido
-            Node3D parent = node.getParent();
-            if (parent != null) {
-                if (node.getValue() < parent.getValue()) {
-                    parent.hideLeftLeaf();
-                } else {
-                    parent.hideRightLeaf();
-                }
-            }
+           
             directions.clear();
         }
     }
@@ -1022,10 +997,8 @@ public class InsertionBinaryTree extends JApplet {
         if (parent != null) {
             if (node == parent.getLeft()) {
                 parent.setLeft(null);
-                parent.showLeftLeaf();
             } else {
                 parent.setRight(null);
-                parent.showRightLeaf();
             }
         } else {
             root = null;
@@ -1236,7 +1209,7 @@ public class InsertionBinaryTree extends JApplet {
         StyleConstants.setForeground(deafaultText, Color.black);
         StyleConstants.setBackground(deafaultText, Color.white);
         //Cor e background do texto destacado
-        StyleConstants.setForeground(highlightedText, Color.red);
+        StyleConstants.setForeground(highlightedText, Color.blue);
         StyleConstants.setBackground(highlightedText, Color.yellow);
 
         createFrame();
@@ -1287,9 +1260,9 @@ public class InsertionBinaryTree extends JApplet {
         return cont;
     }
 
-    void delete(int num) {
+    public Score delete(int num) {
         Score score = new Score();
         delete(num, root, score);
-        score.show(textPane);
+        return score;
     }
 }
