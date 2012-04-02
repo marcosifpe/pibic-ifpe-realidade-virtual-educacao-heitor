@@ -39,8 +39,7 @@ import sun.applet.Main;
 
 /**
  *
- * @author Heitor Paceli Maranhao 
- * email: heitorpaceli@gmail.com
+ * @author Heitor Paceli Maranhao email: heitorpaceli@gmail.com
  */
 public class InsertionBinaryTree {
 
@@ -201,6 +200,7 @@ public class InsertionBinaryTree {
     private JTextArea vars = new JTextArea();
     private JButton removeButton;
     private JButton searchButton;
+    private JButton balanceButton;
     public boolean isRunning = false;
     private Vector3f[] viewPositions;
     public static final float DISTANCE = r * 2;
@@ -328,7 +328,7 @@ public class InsertionBinaryTree {
 
             //mostra a animacao
             insert3D(child, RIGTH, distance / 5, false, searchHighlighter);
-            node.setRight(insertValue(child, node.getRight(), distance / 2,score));
+            node.setRight(insertValue(child, node.getRight(), distance / 2, score));
         }
         highlightsText(INSERT_RETURN, INSERT_CODE);
         return node;
@@ -489,6 +489,15 @@ public class InsertionBinaryTree {
             }
         });
         lowerPanel.add(removeButton);
+        
+        balanceButton = new JButton("Balancear árvore");
+        balanceButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                root = balance(root);
+            }
+        });
+        lowerPanel.add(balanceButton);
         //
         panel.add(lowerPanel);
 
@@ -524,8 +533,8 @@ public class InsertionBinaryTree {
         Node3D result = search(root, num, score);
         highlightMov(null, searchHighlighter);
         vars.setText(" ");
-        score.show(textPane);
-        
+        //score.show(textPane);
+
         String message = (result != null) ? "Valor encontrado" : "Valor não encontrado";
         JOptionPane.showMessageDialog(textPane, message);
         return score;
@@ -964,7 +973,7 @@ public class InsertionBinaryTree {
             sleep(SLEEP_TIME * 3);
             highlightMov(null, searchHighlighter);
             highlightMov(null, removeHighlighter);
-           
+
             directions.clear();
         }
     }
@@ -1052,20 +1061,20 @@ public class InsertionBinaryTree {
                 repeatQuestion = true;
             } else { //se errou
                 if (options[answer] == null ? correct != null : !options[answer].equals(correct)) {
-                    
+
                     JOptionPane.showMessageDialog(textPane, "Resposta incorreta!");
                     repeatQuestion = true;
                 } else { //se acertou
-                    
+
                     repeatQuestion = false;
                 }
             }
             cont++;
         } while (repeatQuestion);
-        if(cont == 1){
+        if (cont == 1) {
             score.addCorrect();
             score.addTotal();
-        }else{
+        } else {
             score.addTotal();
         }
     }
@@ -1264,5 +1273,97 @@ public class InsertionBinaryTree {
         Score score = new Score();
         delete(num, root, score);
         return score;
+    }
+
+    
+    
+    
+    
+    
+    //----------------------------------
+    public Node3D balance(Node3D node) {
+        if (node == null) {
+            return null;
+        }
+        // Business Logic for balancing the Tree.
+
+        //IF tree is right heavy
+        if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 0) {
+            //  IF tree's right subtree is left heavy
+            if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < 0) {
+                // Perform Double Left rotation
+                // write code for Double Left rotation
+                doubleLeftRotate(node);
+            } else {
+                // Perform Single Left rotation
+                //write code for single left rotation
+                node = singleLeftRotate(node);
+            }
+        } //ELSE IF tree is left heavy
+        else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 0) {
+            // IF tree's left subtree is right heavy
+            if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 0) {
+                // Perform Double Right rotation
+                //write code for Double Right Rotation
+                doubleRightRotate(node);
+            } else {
+                // Perform Single Right rotation
+                // write code for single right rotation
+                node = singleRightRotate(node);
+            }
+        }
+
+        //root - > height = max(height(root - > left), height(root - > right)) + 1;
+
+        // Recursively traverse in-order.
+        balance(node.getLeft());
+        balance(node.getRight());
+        
+        return node;
+    }
+
+    Node3D singleLeftRotate(Node3D node) {
+        Node3D p;
+        p = node.getRight();
+        node.setRight(p.getLeft());
+        p.setLeft(node);
+        
+        Transform3D tfTemp = p.getLeft().getTfNode();
+        p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
+        node.getTgNode().setTransform(tfTemp);
+        
+        // Update heights
+        //root - > height = max(height(root - > left), height(root - > right)) + 1;
+        //p - > height = max(root - > height, height(p - > right)) + 1;
+        return p;
+    }
+
+    Node3D singleRightRotate(Node3D node) {
+        Node3D p;
+        p = node.getLeft();
+        node.setLeft(p.getRight());
+        p.setRight(node);
+        
+        Transform3D tfTemp = p.getRight().getTfNode();
+        p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
+        node.getTgNode().setTransform(tfTemp);
+        // Update heights
+        //root - > height = max(height(root - > left), height(root - > right)) + 1;
+        //p - > height = max(root - > height, height(p - > left)) + 1;
+        return p;
+    }
+
+    void doubleLeftRotate(Node3D node) {
+        // 1st perform right rotation on right subtree
+        node = singleRightRotate(node.getRight());
+        // Now, perform 'rotate left' procedure.
+        node = singleLeftRotate(node);
+    }
+
+    void doubleRightRotate(Node3D node) {
+        // 1st perform left rotation on left subtree
+        node = singleLeftRotate(node.getLeft());
+        // Now, perform 'rotate right' procedure.
+        node = singleRightRotate(node);
     }
 }
