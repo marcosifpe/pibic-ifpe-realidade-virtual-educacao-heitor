@@ -334,6 +334,14 @@ public class InsertionBinaryTree {
         return node;
     }
 
+    public float getDistance(int h) {
+        if (h <= 0) {
+            return DISTANCE / 5;
+        } else {
+            return (DISTANCE / 5) / (h * 2);
+        }
+    }
+
     private void createPositionsVector() {
         final int MAX_VIEW_POSITIONS = 5;
         viewPositions = new Vector3f[MAX_VIEW_POSITIONS];
@@ -417,6 +425,14 @@ public class InsertionBinaryTree {
         }
     }
 
+    private void balanceAction() {
+        Transform3D tfTemp = root.getTfNode();
+        root = balance(root);
+        root.getTgNode().setTransform(tfTemp);
+        moveNodes(root);
+        updateConnections(root, 0);
+    }
+
     private void createFrame() {
         JFrame frame = new JFrame("Binary Tree");
         Container contentPane = frame.getContentPane();
@@ -489,23 +505,12 @@ public class InsertionBinaryTree {
             }
         });
         lowerPanel.add(removeButton);
-        
+
         balanceButton = new JButton("Balancear árvore");
         balanceButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                root = balance(root);
-                ArrayList<Node3D> reinsert = root.getAllNodes();
-                
-                root = null;
-                
-                for(Node3D no : reinsert){
-                    insertValue(no.getValue());
-                    nodes.add(no);
-                }
-                
-                reinsert(reinsert);
-                
+                balanceAction();
             }
         });
         lowerPanel.add(balanceButton);
@@ -521,6 +526,27 @@ public class InsertionBinaryTree {
         OrbitBehavior ob = new OrbitBehavior(canvas);
         ob.setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE));
         universe.getViewingPlatform().setViewPlatformBehavior(ob);
+    }
+
+    public void moveNodes(Node3D node) {
+        if (node == null) {
+            return;
+        }
+        Node3D right = node.getRight();
+        Node3D left = node.getLeft();
+        if (right != null) {
+            removeHighlighter.setTransform(node.getTfNode());
+            Transform3D tfTemp = insert3D(right, RIGTH, getDistance(getNodeHeight(right)), true, removeHighlighter);
+            right.getTgNode().setTransform(tfTemp);
+            moveNodes(right);
+        }
+        if (left != null) {
+            removeHighlighter.setTransform(node.getTfNode());
+            Transform3D tfTemp = insert3D(left, LEFT, getDistance(getNodeHeight(left)), true, removeHighlighter);
+            left.getTgNode().setTransform(tfTemp);
+            moveNodes(left);
+        }
+        highlightMov(null, removeHighlighter);
     }
 
     public void moveView(int i) {
@@ -661,7 +687,7 @@ public class InsertionBinaryTree {
         return node;
     }
 
-    public Transform3D insert3D(Node3D node, final int direction, final float distance, boolean isRemove, TransformGroup highlighter) {
+    public Transform3D insert3D(Node3D node, final int direction, final float distance, boolean animationOff, TransformGroup highlighter) {
 
         TransformGroup tgNode = highlighter;
         Transform3D tfNode = new Transform3D();
@@ -695,7 +721,7 @@ public class InsertionBinaryTree {
             translation.x = x;
             translation.y = y;
 
-            if (!isRemove) {
+            if (!animationOff) {
                 //Atualiza a posicao
                 tfNode.setTranslation(translation);
                 tgNode.setTransform(tfNode);
@@ -704,7 +730,7 @@ public class InsertionBinaryTree {
             }
         }
 
-        if (isRemove) {
+        if (animationOff) {
             //Atualiza a posicao
             tfNode.setTranslation(translation);
             tgNode.setTransform(tfNode);
@@ -743,7 +769,7 @@ public class InsertionBinaryTree {
                 node.moveToPosition(Object3DFactory.xInitial, Object3DFactory.yInitial, Object3DFactory.zInitial);
 
                 score = new Score();
-                root = insertValue(node, root, r * 2, score);
+                root = insertValue(node, root, DISTANCE, score);
 
                 int nodeH = getNodeHeight(node);
                 Node3D parent = node.getParent();
@@ -1286,11 +1312,6 @@ public class InsertionBinaryTree {
         return score;
     }
 
-    
-    
-    
-    
-    
     //----------------------------------
     public Node3D balance(Node3D node) {
         if (node == null) {
@@ -1329,44 +1350,53 @@ public class InsertionBinaryTree {
         // Recursively traverse in-order.
         balance(node.getLeft());
         balance(node.getRight());
-        
+
         return node;
     }
 
     Node3D singleLeftRotate(Node3D node) {
+        try{
         Node3D p;
         p = node.getRight();
         node.setRight(p.getLeft());
         p.setLeft(node);
         
-        /*3d
-        Transform3D tfTemp = p.getLeft().getTfNode();
-        p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
-        node.getTgNode().setTransform(tfTemp);
-        */
-        
+        /*
+         * 3d Transform3D tfTemp = p.getLeft().getTfNode();
+         * p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
+         * node.getTgNode().setTransform(tfTemp);
+         */
+
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
         //p - > height = max(root - > height, height(p - > right)) + 1;
         return p;
+        }catch(NullPointerException ex){
+            
+        }
+        return root;
     }
 
     Node3D singleRightRotate(Node3D node) {
+        try{
         Node3D p;
         p = node.getLeft();
         node.setLeft(p.getRight());
         p.setRight(node);
-        
-        /*3d
-        Transform3D tfTemp = p.getRight().getTfNode();
-        p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
-        node.getTgNode().setTransform(tfTemp);
-        */
-        
+        /*
+         * 3d Transform3D tfTemp = p.getRight().getTfNode();
+         * p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
+         * node.getTgNode().setTransform(tfTemp);
+         */
+
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
         //p - > height = max(root - > height, height(p - > left)) + 1;
         return p;
+        }catch(NullPointerException ex){
+            
+        }
+        return root;
     }
 
     void doubleLeftRotate(Node3D node) {
@@ -1381,5 +1411,10 @@ public class InsertionBinaryTree {
         node = singleLeftRotate(node.getLeft());
         // Now, perform 'rotate right' procedure.
         node = singleRightRotate(node);
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+    public void rotLeft(){
+        Node3D temp = root;
     }
 }
