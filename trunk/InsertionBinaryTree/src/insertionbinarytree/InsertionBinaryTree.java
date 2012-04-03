@@ -191,7 +191,7 @@ public class InsertionBinaryTree {
     public Node3D root;
     final static float r = 0.1f;
     public ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public JTextPane textPane;
     public TransformGroup searchHighlighter, removeHighlighter;
     private SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -495,6 +495,17 @@ public class InsertionBinaryTree {
 
             public void actionPerformed(ActionEvent e) {
                 root = balance(root);
+                ArrayList<Node3D> reinsert = root.getAllNodes();
+                
+                root = null;
+                
+                for(Node3D no : reinsert){
+                    insertValue(no.getValue());
+                    nodes.add(no);
+                }
+                
+                reinsert(reinsert);
+                
             }
         });
         lowerPanel.add(balanceButton);
@@ -999,7 +1010,7 @@ public class InsertionBinaryTree {
 
     private void removeNode(Node3D node) {
         node.hideNode(node);
-        ArrayList<Node3D> nodesReinsert = node.getAllNodes(node);
+        ArrayList<Node3D> nodesReinsert = node.getAllChildren(node);
 
         Node3D parent = node.getParent();
         //Se o no pai for null é porque é o nó raiz
@@ -1085,7 +1096,7 @@ public class InsertionBinaryTree {
         Node3D substitute = findSubstitute(node.getRight(), false);
 
         ArrayList<Node3D> optionsNodes = new ArrayList<Node3D>();
-        root.getAllNodes(root, optionsNodes);
+        root.getAllChildren(root, optionsNodes);
         optionsNodes.add(root);
         optionsNodes.remove(node);
 
@@ -1328,9 +1339,11 @@ public class InsertionBinaryTree {
         node.setRight(p.getLeft());
         p.setLeft(node);
         
+        /*3d
         Transform3D tfTemp = p.getLeft().getTfNode();
         p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
         node.getTgNode().setTransform(tfTemp);
+        */
         
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
@@ -1344,9 +1357,12 @@ public class InsertionBinaryTree {
         node.setLeft(p.getRight());
         p.setRight(node);
         
+        /*3d
         Transform3D tfTemp = p.getRight().getTfNode();
         p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
         node.getTgNode().setTransform(tfTemp);
+        */
+        
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
         //p - > height = max(root - > height, height(p - > left)) + 1;

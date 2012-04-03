@@ -100,33 +100,6 @@ public class Object3DFactory {
 
         node.setText3D(text3d);
         node.setTgNode(tgNode);
-/*
-        Transform3D tfLeftLeaf = new Transform3D();
-        //esconde a folha
-        tfLeftLeaf.setTranslation(new Vector3f(999, 999, 999));
-        TransformGroup tgLeftLeaf = new TransformGroup(tfLeftLeaf);
-        tgLeftLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        tgLeftLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-        tgLeftLeaf.setTransform(tfLeftLeaf);
-        Box leftLeaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false));
-        tgLeftLeaf.addChild(leftLeaf);
-
-
-        Transform3D tfRightLeaf = new Transform3D();
-        //tfRightLeaf.setTranslation(new Vector3f(InsertionBinaryTree.r*2, -InsertionBinaryTree.r*2, InsertionBinaryTree.r*2));
-        tfRightLeaf.setTranslation(new Vector3f(999, 999, 999));
-        TransformGroup tgRightLeaf = new TransformGroup(tfRightLeaf);
-        tgRightLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-        tgRightLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        tgRightLeaf.setTransform(tfRightLeaf);
-        Box rightLeaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false));
-        tgRightLeaf.addChild(rightLeaf);
-
-        node.setLeftLeaf(tgLeftLeaf);
-        node.setRightLeaf(tgRightLeaf);
-        //node.getTgNode().addChild(tgLeftLeaf);
-        //node.getTgNode().addChild(tgRightLeaf);
-*/
         node.hideNode(node);
         calculateConnections(node);
         return node;
