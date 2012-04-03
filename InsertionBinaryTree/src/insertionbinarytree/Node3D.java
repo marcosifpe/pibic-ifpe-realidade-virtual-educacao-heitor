@@ -233,21 +233,34 @@ public class Node3D {
         }
     }
 
-    public ArrayList<Node3D> getAllNodes(Node3D node) {
+    public ArrayList<Node3D> getAllChildren(Node3D node) {
         ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-        getAllNodes(node, nodes);
+        getAllChildren(node, nodes);
 
+        moveToInitialPosition(nodes);
+
+        return nodes;
+    }
+    
+    private void moveToInitialPosition(ArrayList<Node3D> nodes){
         //Posiciona os nós na posição inicial, para serem inseridos novamente
         for (Node3D temp : nodes) {
             Transform3D tf = new Transform3D();
             tf.setTranslation(new Vector3f(0.0f, Object3DFactory.yInitial, 0.0f));
             temp.getTgNode().setTransform(tf);
         }
-
+    } 
+    
+    public ArrayList<Node3D> getAllNodes(){
+        ArrayList<Node3D> nodes = new ArrayList<Node3D>();
+        getAllChildren(this, nodes);
+        
+        moveToInitialPosition(nodes);
+        
         return nodes;
     }
 
-    public void getAllNodes(Node3D node, ArrayList<Node3D> nodes) {
+    public void getAllChildren(Node3D node, ArrayList<Node3D> nodes) {
         if (node != null) {
             if (node.left != null) {
                 nodes.add(node.left);
@@ -255,10 +268,8 @@ public class Node3D {
             if (node.right != null) {
                 nodes.add(node.right);
             }
-            getAllNodes(node.left, nodes);
-            getAllNodes(node.right, nodes);
-            //node.left = null;
-            //node.right = null;
+            getAllChildren(node.left, nodes);
+            getAllChildren(node.right, nodes);
         }
     }
 
