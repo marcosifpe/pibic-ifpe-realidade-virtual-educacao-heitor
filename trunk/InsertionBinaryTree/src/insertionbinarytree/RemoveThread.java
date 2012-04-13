@@ -5,6 +5,7 @@
 package insertionbinarytree;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,6 +35,15 @@ public class RemoveThread extends Thread {
             int num = Integer.parseInt(numString);
             tree.moveView(tree.viewX());
             score = tree.delete(num);
+            tree.root = tree.balance(tree.root);
+            
+            //***
+            ArrayList<Node3D> allNodes = tree.root.getAllNodes();
+            allNodes.add(0, tree.root);
+            tree.root = null;
+            tree.reinsert(allNodes);
+            //***
+            
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
             tree.updateInsertButton();
         } finally {

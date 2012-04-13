@@ -891,7 +891,10 @@ public class InsertionBinaryTree {
                     setRemoveVars(element, nodeValue, left, right, null);
                     highlightsText(DELETE_DELETE1, DELETE_CODE);
 
-                    removeNode(node);
+                    //removeNode(node);
+                    //********************
+                    doDelete(node);
+                    //*******************
                 } else if (node.getLeft() == null) {
                     highlightsText(DELETE_L_LEAF, DELETE_CODE);
 
@@ -912,7 +915,10 @@ public class InsertionBinaryTree {
                     setRemoveVars(element, nodeValue, left, right, null);
                     highlightsText(DELETE_DELETE2, DELETE_CODE);
 
-                    removeNode(node);
+                    //removeNode(node);
+                    //*************************
+                    doDelete(node);
+                    //*************************
                 } else {
 
                     highlightsText(DELETE_L_LEAF, DELETE_CODE);
@@ -1355,5 +1361,54 @@ public class InsertionBinaryTree {
     void doubleRightRotate(Node3D node) {
         node = singleLeftRotate(node.getLeft());
         node = singleRightRotate(node);
+    }
+
+    private void doDelete(Node3D node) {
+        Node3D parent = searchParent(node.getValue());
+        if (parent != null) {
+            //Node3D parent = node.getParent();
+            if (parent.getLeft() == node) {
+                parent.setLeft(null);
+            } else {
+                parent.setRight(null);
+            }
+        } else {
+            System.out.println("pai é null");
+        }
+        ArrayList re = node.getAllChildren(node);
+        node.hideNode(node);
+        reinsert(re);
+    }
+
+    private Node3D searchParent(int num) {
+        return searchParent(num, root);
+    }
+
+    private Node3D searchParent(int num, Node3D node) {
+        Node3D r, l;
+        if (node == null) {
+            return null;
+        } else {
+            r = node.getRight();
+            l = node.getLeft();
+        }
+        if (node.getValue() == num) {
+            return node.getParent();
+        }
+        if (r != null) {
+            if (r.getValue() == num) {
+                return node;
+            }
+        }
+        if (l != null) {
+            if (l.getValue() == num) {
+                return node;
+            }
+        }
+        if(num < node.getValue()){
+            return searchParent(num, node.getLeft());
+        }else{
+            return searchParent(num, node.getRight());
+        }
     }
 }
