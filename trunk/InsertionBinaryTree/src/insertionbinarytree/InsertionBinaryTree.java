@@ -17,7 +17,6 @@ import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.BoxLayout;
-import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -1317,43 +1316,24 @@ public class InsertionBinaryTree {
         if (node == null) {
             return null;
         }
-        // Business Logic for balancing the Tree.
 
-        //IF tree is right heavy
-        if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 0) {
-            //  IF tree's right subtree is left heavy
-            if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < 0) {
-                // Perform Double Left rotation
-                // write code for Double Left rotation
+        if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1) {
+            if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < -1) {
                 doubleLeftRotate(node);
             } else {
-                // Perform Single Left rotation
-                //write code for single left rotation
                 node = singleLeftRotate(node);
             }
-        } //ELSE IF tree is left heavy
-        else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 0) {
-            // IF tree's left subtree is right heavy
-            if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 0) {
-                // Perform Double Right rotation
-                //write code for Double Right Rotation
+        }
+        else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
+            if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 1) {
                 doubleRightRotate(node);
             } else {
-                // Perform Single Right rotation
-                // write code for single right rotation
                 node = singleRightRotate(node);
             }
         }
-
-        //root - > height = max(height(root - > left), height(root - > right)) + 1;
-
-        // Recursively traverse in-order.
-        balance(node.getLeft());
-        balance(node.getRight());
-
         return node;
     }
-
+    
     Node3D singleLeftRotate(Node3D node) {
         try{
         Node3D p;
@@ -1361,11 +1341,11 @@ public class InsertionBinaryTree {
         node.setRight(p.getLeft());
         p.setLeft(node);
         
-        /*
-         * 3d Transform3D tfTemp = p.getLeft().getTfNode();
-         * p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
-         * node.getTgNode().setTransform(tfTemp);
-         */
+        
+        //3d Transform3D tfTemp = p.getLeft().getTfNode();
+        //p.getLeft().getTgNode().setTransform(node.getRight().getTfNode());
+        //node.getTgNode().setTransform(tfTemp);
+        //
 
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
@@ -1377,17 +1357,18 @@ public class InsertionBinaryTree {
         return root;
     }
 
+    
     Node3D singleRightRotate(Node3D node) {
         try{
         Node3D p;
         p = node.getLeft();
         node.setLeft(p.getRight());
         p.setRight(node);
-        /*
-         * 3d Transform3D tfTemp = p.getRight().getTfNode();
-         * p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
-         * node.getTgNode().setTransform(tfTemp);
-         */
+        //
+         //3d Transform3D tfTemp = p.getRight().getTfNode();
+         //p.getRight().getTgNode().setTransform(node.getLeft().getTfNode());
+         //node.getTgNode().setTransform(tfTemp);
+         //
 
         // Update heights
         //root - > height = max(height(root - > left), height(root - > right)) + 1;
@@ -1398,6 +1379,7 @@ public class InsertionBinaryTree {
         }
         return root;
     }
+    
 
     void doubleLeftRotate(Node3D node) {
         // 1st perform right rotation on right subtree
@@ -1417,4 +1399,41 @@ public class InsertionBinaryTree {
     public void rotLeft(){
         Node3D temp = root;
     }
+/*
+    private Node3D singleLeftRotate(Node3D node) {
+        Node3D temp = node;
+        node = node.getRight();
+        Node3D left = node.getLeft();
+        while(left != null){
+            if(left.getLeft() == null){
+                left.setLeft(temp);
+                break;
+            }else{
+                left = left.getLeft();
+            }
+        }
+        if(left == null){
+            node.setLeft(temp);
+        }
+        return node;
+    }
+
+    private Node3D singleRightRotate(Node3D node) {
+        Node3D temp = node;
+        node = node.getLeft();
+        Node3D right = node.getRight();
+        while(right != null){
+            if(right.getRight()==null){
+                right.setRight(temp);
+                break;
+            }else{
+                right = right.getRight();
+            }
+        }
+        if(right == null){
+            node.setRight(temp);
+        }
+        return node;
+    }
+    */
 }
