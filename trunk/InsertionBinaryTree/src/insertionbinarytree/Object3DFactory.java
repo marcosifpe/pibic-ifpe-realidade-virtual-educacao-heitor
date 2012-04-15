@@ -7,9 +7,11 @@ package insertionbinarytree;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.image.ImageException;
 import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Color;
 import java.awt.Font;
+import javax.imageio.IIOException;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
@@ -214,7 +216,11 @@ public class Object3DFactory {
         app.setColoringAttributes(new ColoringAttributes(new Color3f(color), 1));
 
         if (!noTexture) {
-            app.setTexture(createTexture("folha.png"));
+            try{
+                app.setTexture(createTexture("folha.png"));
+            }catch(ImageException ex){
+                app.setColoringAttributes(new ColoringAttributes(new Color3f(Color.GREEN), 1));
+            }
 
             TexCoordGeneration tcg = new TexCoordGeneration(TexCoordGeneration.OBJECT_LINEAR,
                     TexCoordGeneration.TEXTURE_COORDINATE_2);
