@@ -46,16 +46,17 @@ public class InsertThread extends Thread {
             } else {
                 tree.moveView(tree.prevViewX(num));
                 score = tree.insertValue(num);
-                tree.root = tree.balance(tree.root);
+                //tree.root = tree.balance(tree.root);
                 tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
                 tree.updateInsertButton();
             }
         } finally {
+            /*
             ArrayList<Node3D> allNodes = tree.root.getAllNodes();
             allNodes.add(0, tree.root);
             tree.root = null;
             tree.reinsert(allNodes);
-            
+            */
             
             tree.updateConnections(tree.root, 0);
             tree.moveView(tree.viewX());
