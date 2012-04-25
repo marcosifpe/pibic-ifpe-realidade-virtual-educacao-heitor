@@ -987,12 +987,17 @@ public class InsertionBinaryTree {
             insert(node, directions);
             float distance = DISTANCE;
 
-            showHighlighter(searchHighlighter);
-            highlightMov(node, removeHighlighter);
+            TransformGroup tgTemp = new TransformGroup();
+            showHighlighter(tgTemp);
+            /*
+             * showHighlighter(searchHighlighter);
+             * highlightMov(node, removeHighlighter);
+             */
 
             Transform3D tfTemp = null;
             for (int i = directions.size() - 1; i >= 0; i--) {
-                tfTemp = insert3D(node, directions.get(i), distance / 5, true, searchHighlighter);
+                //tfTemp = insert3D(node, directions.get(i), distance / 5, true, searchHighlighter);
+                tfTemp = insert3D(node, directions.get(i), distance / 5, true, tgTemp);
                 distance /= 2;
             }
             if (node != null && tfTemp != null) {
@@ -1005,7 +1010,7 @@ public class InsertionBinaryTree {
             sleep(SLEEP_TIME * 3);
             highlightMov(null, searchHighlighter);
             highlightMov(null, removeHighlighter);
-
+            updateConnections(this.root, 0);
             directions.clear();
         }
     }
@@ -1373,7 +1378,7 @@ public class InsertionBinaryTree {
                 parent.setRight(null);
             }
         } else {
-            System.out.println("pai é null");
+            root = null;
         }
         ArrayList re = node.getAllChildren(node);
         node.hideNode(node);

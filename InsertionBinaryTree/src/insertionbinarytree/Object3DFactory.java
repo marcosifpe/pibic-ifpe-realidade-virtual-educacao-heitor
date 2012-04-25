@@ -219,7 +219,7 @@ public class Object3DFactory {
             try{
                 app.setTexture(createTexture("folha.png"));
             }catch(ImageException ex){
-                app.setColoringAttributes(new ColoringAttributes(new Color3f(Color.GREEN), 1));
+                app.setColoringAttributes(new ColoringAttributes(new Color3f(0.0f, 0.3f, 0.0f), 1));
             }
 
             TexCoordGeneration tcg = new TexCoordGeneration(TexCoordGeneration.OBJECT_LINEAR,
