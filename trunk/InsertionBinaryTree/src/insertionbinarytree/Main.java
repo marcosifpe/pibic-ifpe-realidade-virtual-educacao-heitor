@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String args[]) {
 
-        final JFrame frame = new InitialFrame("Árvore Binária");
+        final JFrame frame = new InitialFrame("Escolha o ambiente virtual");
         
 
     }
