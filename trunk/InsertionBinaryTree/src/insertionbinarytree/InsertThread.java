@@ -56,10 +56,10 @@ public class InsertThread extends Thread {
                 tree.root = null;
                 tree.reinsert(allNodes);
             }
-            //**********************************
+            
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
             tree.updateInsertButton();
-            //******************
+            
 
             tree.updateConnections(tree.root, 0);
             tree.moveView(tree.viewX());
