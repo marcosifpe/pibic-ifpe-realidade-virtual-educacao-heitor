@@ -203,6 +203,15 @@ public class InsertionBinaryTree {
     private Vector3f[] viewPositions;
     public static final float DISTANCE = r * 2;
     public static final int H_MAX = 3;
+    private boolean balanced;
+
+    public InsertionBinaryTree(boolean balanced) {
+        this.balanced = balanced;
+    }
+    
+    public boolean isBalanced(){
+        return balanced;
+    }
 
     public int viewLeft() {
         int contLeft = 0;
@@ -1014,7 +1023,7 @@ public class InsertionBinaryTree {
             directions.clear();
         }
     }
-
+    
     public void updateConnections(Node3D node, int h) {
 
         if (node != null) {
