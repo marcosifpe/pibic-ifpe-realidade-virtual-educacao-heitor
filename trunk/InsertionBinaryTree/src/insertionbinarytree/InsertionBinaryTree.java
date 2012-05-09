@@ -515,7 +515,7 @@ public class InsertionBinaryTree {
         //
         panel.add(lowerPanel);
 
-        contentPane.add(BorderLayout.EAST, panel);
+        contentPane.add(BorderLayout.WEST, panel);
         //
 
         frame.setSize(800, 640);

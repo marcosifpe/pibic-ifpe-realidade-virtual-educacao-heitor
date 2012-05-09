@@ -60,7 +60,7 @@ public class InitialFrame extends JFrame implements Runnable {
 
         this.getContentPane().add(balanced);
         this.getContentPane().add(notBalanced);
-        this.getContentPane().add(sort);
+        //this.getContentPane().add(sort);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         t = new Thread(this);
@@ -96,7 +96,8 @@ public class InitialFrame extends JFrame implements Runnable {
                 startTree(true);
                 break;
             case SORT:
-                Sorting.Main sort = new Sorting.Main();
+                //Sorting.Main sort = new Sorting.Main();
+                JOptionPane.showMessageDialog(null, "Não disponível");
                 break;
             default:
                 JOptionPane.showMessageDialog(null, "Opção inválida", "ERRO", JOptionPane.ERROR_MESSAGE);
