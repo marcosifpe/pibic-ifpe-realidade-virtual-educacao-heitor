@@ -28,13 +28,14 @@ public class InsertThread extends Thread {
 
     private void insert() {
         Score score = null;
+        int num = 0;
         try {
             //InsertionBinaryTree.moveView(InsertionBinaryTree.viewX() + 1);
 
             tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
             tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja inserir?");
-            int num = Integer.parseInt(numString);
+            num = Integer.parseInt(numString);
 
 
             int h = tree.prevNodeHeight(num);
@@ -50,16 +51,33 @@ public class InsertThread extends Thread {
             }
         } finally {
             if (tree.isBalanced()) {
-                tree.root = tree.balance(tree.root);
-                ArrayList<Node3D> allNodes = tree.root.getAllNodes();
-                allNodes.add(0, tree.root);
-                tree.root = null;
-                tree.reinsert(allNodes);
+                int h = tree.getHBinaryTree();
+                final int H = 2;
+                if(h==H){
+                    JOptionPane.showMessageDialog(null, "1");
+                    tree.root = tree.balance(tree.root);
+                    tree.root.setParent(null);
+                }else if (num<tree.root.getValue() && h > H){
+                    JOptionPane.showMessageDialog(null, "2");
+                    Node3D left = tree.balance(tree.root.getLeft());
+                    left.setParent(tree.root);
+                    tree.root.setLeft(left);
+                }else if(h>H){
+                    JOptionPane.showMessageDialog(null, "3");
+                    Node3D right = tree.balance(tree.root.getRight());
+                    right.setParent(tree.root);
+                    tree.root.setRight(right);
+                }
+//                ArrayList<Node3D> allNodes = tree.root.getAllNodes();
+//                allNodes.add(0, tree.root);
+//                tree.root = null;
+//                tree.reinsert(allNodes);
+
             }
-            
+
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
             tree.updateInsertButton();
-            
+
 
             tree.updateConnections(tree.root, 0);
             tree.moveView(tree.viewX());

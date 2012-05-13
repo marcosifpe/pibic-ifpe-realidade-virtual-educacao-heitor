@@ -190,7 +190,7 @@ public class InsertionBinaryTree {
     public Node3D root;
     final static float r = 0.1f;
     public ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 40;
+    public static final int SLEEP_TIME = 0;
     public JTextPane textPane;
     public TransformGroup searchHighlighter, removeHighlighter;
     private SimpleAttributeSet deafaultText = new SimpleAttributeSet();
@@ -208,8 +208,8 @@ public class InsertionBinaryTree {
     public InsertionBinaryTree(boolean balanced) {
         this.balanced = balanced;
     }
-    
-    public boolean isBalanced(){
+
+    public boolean isBalanced() {
         return balanced;
     }
 
@@ -685,9 +685,9 @@ public class InsertionBinaryTree {
         return node;
     }
 
-    public Transform3D insert3D(Node3D node, final int direction, final float distance, boolean animationOff, TransformGroup highlighter) {
+    public Transform3D insert3D(Node3D node, final int direction, final float distance, boolean animationOff, TransformGroup tg) {
 
-        TransformGroup tgNode = highlighter;
+        TransformGroup tgNode = tg;
         Transform3D tfNode = new Transform3D();
         tgNode.getTransform(tfNode);
         Vector3f translation = new Vector3f();
@@ -695,6 +695,7 @@ public class InsertionBinaryTree {
 
         float x = translation.x;
         float y = translation.y;
+        System.out.println("y=" + y + " | x=" + x);
         float cont = 0.0f;
 
         while (true) {
@@ -733,7 +734,7 @@ public class InsertionBinaryTree {
             tfNode.setTranslation(translation);
             tgNode.setTransform(tfNode);
         }
-
+        System.out.println("y=" + y + " | x=" + x);
         return tfNode;
     }
 
@@ -990,6 +991,8 @@ public class InsertionBinaryTree {
         List<Integer> directions = new ArrayList();
         for (int j = 0; j < nodesToInsert.size(); j++) {
             Node3D node = nodesToInsert.get(j);
+            node.setLeft(null);
+            node.setRight(null);
             node.setAutoUpdateText(true);
             node.getText3D().setString(Integer.toString(node.getValue()));
             node.setParent(null);
@@ -999,8 +1002,8 @@ public class InsertionBinaryTree {
             TransformGroup tgTemp = new TransformGroup();
             showHighlighter(tgTemp);
             /*
-             * showHighlighter(searchHighlighter);
-             * highlightMov(node, removeHighlighter);
+             * showHighlighter(searchHighlighter); highlightMov(node,
+             * removeHighlighter);
              */
 
             Transform3D tfTemp = null;
@@ -1023,7 +1026,7 @@ public class InsertionBinaryTree {
             directions.clear();
         }
     }
-    
+
     public void updateConnections(Node3D node, int h) {
 
         if (node != null) {
@@ -1225,7 +1228,7 @@ public class InsertionBinaryTree {
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Explicações");
-        menu.setMnemonic(KeyEvent.VK_ALT);
+        menu.setMnemonic(KeyEvent.VK_F1);
 
         menuBar.add(menu);
 
@@ -1328,13 +1331,15 @@ public class InsertionBinaryTree {
 
         if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1) {
             if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < -1) {
-                doubleLeftRotate(node);
+                node = doubleLeftRotate(node);
+                System.out.println("Double rotation");
             } else {
                 node = singleLeftRotate(node);
             }
         } else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
             if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 1) {
-                doubleRightRotate(node);
+                node = doubleRightRotate(node);
+                System.out.println("Double rotation");
             } else {
                 node = singleRightRotate(node);
             }
@@ -1343,38 +1348,172 @@ public class InsertionBinaryTree {
     }
 
     Node3D singleLeftRotate(Node3D node) {
+        JOptionPane.showMessageDialog(null, "Left Rotate");
+        if (node == null) {
+            return null;
+        }
+
         try {
-            Node3D p;
-            p = node.getRight();
-            node.setRight(p.getLeft());
+//            Node3D right = node.getRight();
+//            while (right != null) {
+//                right = right.getLeft();
+//            }
+//            if (right != null) {
+////                Transform3D tf3d = right.getTfNode();
+////                Vector3f v3f = new Vector3f();
+////                tf3d.get(v3f);
+////                v3f.y += 0.40999982;
+////                v3f.x += 1.6399995 / (getNodeHeight(right) - 1);
+////                tf3d.set(v3f);
+////                right.getTgNode().setTransform(tf3d);
+////
+////                moveBalance(right.getLeft(), 1, 1, -1);
+//
+//                //*********
+//                right.getTgNode().setTransform(node.getTfNode());
+//                //*********
+//
+//                Node3D rl;
+//                int aux;
+//                if (right.getRight() != null) {
+//                    rl = right.getRight();
+//                    aux = 1;
+//                } else {
+//                    rl = right.getLeft();
+//                    aux = -1;
+//                }
+//                if (rl != null) {
+//                    Transform3D tfRl = rl.getTfNode();
+//                    Vector3f vRL = new Vector3f();
+//                    tfRl.get(vRL);
+//                    vRL.y += 0.40999982;
+//                    vRL.x -= (1.6399995 / (getNodeHeight(rl) + 1)) * aux;
+//                    tfRl.set(vRL);
+//                    rl.getTgNode().setTransform(tfRl);
+//
+//                    moveBalance(rl.getLeft(), 1, -1, 1);
+//                    moveBalance(rl.getRight(), 1, -1, 1);
+//                }
+//            }
+//            Transform3D tfNode = node.getTfNode();
+//            Vector3f vNode = new Vector3f();
+//            tfNode.get(vNode);
+//            vNode.y -= 0.40999982;
+//            vNode.x += 1.6399995 / (getNodeHeight(node));
+//            tfNode.set(vNode);
+//            node.getTgNode().setTransform(tfNode);
+//
+//            moveBalance(node.getLeft(), -1, 1, 0);
+//            moveBalance(node.getRight(), -1, 1, 0);
+
+
+////*********************************************************************
+//            Node3D temp = node.getRight();
+//            if(temp != null){
+//                temp.getTgNode().setTransform(node.getTfNode());
+//            }
+//*********************************************************************
+//
+            Node3D p, oldRight;
+            oldRight = node.getRight();
+            p = node.getRight().getLeft();
+            node.getRight().setLeft(null);
+            if(p==null){
+                p=node.getRight();
+            }else{
+                p.setRight(node.getRight());
+            }
+            node.setRight(null);
+            //node.setRight(p.getLeft());
             p.setLeft(node);
+            
+            if(p.getRight()!=null && p.getRight()!=oldRight){
+                p.getRight().getTgNode().setTransform(p.getTfNode());
+            }
+            p.getTgNode().setTransform(node.getTfNode());
+            
+            TransformGroup tgTemp = new TransformGroup(node.getTfNode());
+            float d = (node == root) ? DISTANCE/5 : (DISTANCE/2)/5;
+            Transform3D tf = insert3D(null, LEFT, d, true, tgTemp);
+            
+            node.getTgNode().setTransform(tf);
+//            
+//            Transform3D tfNode = node.getTfNode();
+//            Vector3f vNode = new Vector3f();
+//            tfNode.get(vNode);
+//            vNode.y -= 0.40999982;
+//            vNode.x += 1.6399995 / (getNodeHeight(node));
+//            tfNode.set(vNode);
+//            node.getTgNode().setTransform(tfNode);
+
+//
+//            Node3D nNode;
+//            if (node.getRight() != null) {
+//                nNode = node.getRight();
+//                if (nNode.getLeft() != null) {
+//                    nNode = node.getRight().getLeft();
+//                }
+//            }else{
+//                return root;
+//            }
+//            nNode.setLeft(node);
+//            return nNode;
 
             return p;
+
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "NULL");
         }
         return root;
     }
 
     Node3D singleRightRotate(Node3D node) {
+        JOptionPane.showMessageDialog(null, "Right Rotate");
         try {
             Node3D p;
             p = node.getLeft();
+            Transform3D pTf = null;
+            if (p != null) {
+                pTf = p.getTfNode();
+            }
+
+
             node.setLeft(p.getRight());
             p.setRight(node);
             return p;
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
         }
         return root;
     }
 
-    void doubleLeftRotate(Node3D node) {
+    Node3D doubleLeftRotate(Node3D node) {
+        Node3D parent = node.getParent();
         node = singleRightRotate(node.getRight());
+        if(parent!=null){
+            if(parent.getLeft()==node){
+                parent.setLeft(node);
+            }else{
+                parent.setRight(node);
+            }
+        }
         node = singleLeftRotate(node);
+        return node;
     }
 
-    void doubleRightRotate(Node3D node) {
+    Node3D doubleRightRotate(Node3D node) {
+        Node3D parent = node.getParent();
         node = singleLeftRotate(node.getLeft());
+        if(parent!=null){
+            if(parent.getLeft()==node){
+                parent.setLeft(node);
+            }else{
+                parent.setRight(node);
+            }
+        }
         node = singleRightRotate(node);
+        return node;
     }
 
     private void doDelete(Node3D node) {
@@ -1419,10 +1558,29 @@ public class InsertionBinaryTree {
                 return node;
             }
         }
-        if(num < node.getValue()){
+        if (num < node.getValue()) {
             return searchParent(num, node.getLeft());
-        }else{
+        } else {
             return searchParent(num, node.getRight());
+        }
+    }
+
+    private void moveBalance(Node3D temp, int ySign, int xSign, int hSum) {
+        if (temp == null) {
+            return;
+        }
+        try {
+            Transform3D tfTemp = temp.getTfNode();
+            Vector3f vTemp = new Vector3f();
+            tfTemp.get(vTemp);
+            vTemp.y += (0.40999982 * ySign);
+            vTemp.x += (1.6399995 / (getNodeHeight(temp) + hSum)) * xSign;
+            tfTemp.setTranslation(vTemp);
+            temp.getTgNode().setTransform(tfTemp);
+            moveBalance(temp.getLeft(), ySign, xSign, hSum);
+            moveBalance(temp.getRight(), ySign, xSign, hSum);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }
