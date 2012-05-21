@@ -208,7 +208,8 @@ public class InsertionBinaryTree {
         this.balanced = balanced;
     }
 
-    public boolean isBalanced() {
+    
+    public boolean isAVL() {
         return balanced;
     }
 
@@ -1531,6 +1532,7 @@ public class InsertionBinaryTree {
 
     Node3D doubleLeftRotate(Node3D node) {
         Node3D parent = node.getParent();
+        Node3D temp = node;
         node = singleRightRotate(node.getRight());
         if(parent!=null){
             if(parent.getLeft()==node){
@@ -1538,6 +1540,8 @@ public class InsertionBinaryTree {
             }else{
                 parent.setRight(node);
             }
+        }else if(temp == root){
+            root = node;
         }
         node = singleLeftRotate(node);
         return node;
@@ -1545,6 +1549,7 @@ public class InsertionBinaryTree {
 
     Node3D doubleRightRotate(Node3D node) {
         Node3D parent = node.getParent();
+        Node3D temp = node;
         node = singleLeftRotate(node.getLeft());
         if(parent!=null){
             if(parent.getLeft()==node){
@@ -1552,6 +1557,8 @@ public class InsertionBinaryTree {
             }else{
                 parent.setRight(node);
             }
+        }else if(temp == root){
+            root = node;
         }
         node = singleRightRotate(node);
         return node;

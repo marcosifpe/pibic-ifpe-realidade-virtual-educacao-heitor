@@ -50,9 +50,10 @@ public class InsertThread extends Thread {
 
             }
         } finally {
-            if (tree.isBalanced()) {
+            if (tree.isAVL()) {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
+                JOptionPane.showMessageDialog(null, "h = "+h);
                 if(h==H){
                     JOptionPane.showMessageDialog(null, "1");
                     tree.root = tree.balance(tree.root);
