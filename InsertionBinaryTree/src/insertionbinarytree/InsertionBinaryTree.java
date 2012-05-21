@@ -34,7 +34,6 @@ import javax.swing.text.StyledDocument;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
-import sun.applet.Main;
 
 /**
  *
@@ -822,7 +821,7 @@ public class InsertionBinaryTree {
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -1469,7 +1468,47 @@ public class InsertionBinaryTree {
     }
 
     Node3D singleRightRotate(Node3D node) {
-        JOptionPane.showMessageDialog(null, "Right Rotate");
+        JOptionPane.showMessageDialog(null, "Right Rotate!");
+        
+         if (node == null) {
+            return null;
+        }
+
+        try {
+
+            Node3D p, oldLeft;
+            oldLeft = node.getLeft();
+            p = node.getLeft().getRight();
+            node.getLeft().setRight(null);
+            if(p==null){
+                p=node.getLeft();
+            }else{
+                p.setLeft(node.getLeft());
+            }
+            node.setLeft(null);
+            //node.setRight(p.getLeft());
+            p.setRight(node);
+            
+            if(p.getLeft()!=null && p.getLeft()!=oldLeft){
+                p.getLeft().getTgNode().setTransform(p.getTfNode());
+            }
+            p.getTgNode().setTransform(node.getTfNode());
+            
+            TransformGroup tgTemp = new TransformGroup(node.getTfNode());
+            float d = (node == root) ? DISTANCE/5 : (DISTANCE/2)/5;
+            Transform3D tf = insert3D(null, RIGTH, d, true, tgTemp);
+            
+            node.getTgNode().setTransform(tf);
+
+            return p;
+
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "NULL");
+        }
+        return root;
+        
+        /*
         try {
             Node3D p;
             p = node.getLeft();
@@ -1486,6 +1525,8 @@ public class InsertionBinaryTree {
             ex.printStackTrace();
         }
         return root;
+        * 
+        */
     }
 
     Node3D doubleLeftRotate(Node3D node) {
