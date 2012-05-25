@@ -5,6 +5,8 @@
 package insertionbinarytree;
 
 import java.awt.Dimension;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
 import javax.swing.JOptionPane;
 
 /**
@@ -52,27 +54,47 @@ public class InsertThread extends Thread {
             if (tree.isAVL()) {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
-                JOptionPane.showMessageDialog(null, "h = "+h);
-                if(h==H){
-                    JOptionPane.showMessageDialog(null, "1");
-                    tree.root = tree.balance(tree.root);
-                    tree.root.setParent(null);
-                }else if (num<tree.root.getValue() && h > H){
+                JOptionPane.showMessageDialog(null, "h = " + h);
+                Node3D gambi = null;
+                int gambiDirection = tree.LEFT;
+                if (h == H) {
+//                    JOptionPane.showMessageDialog(null, "1");
+//                    tree.root = tree.balance(tree.root);
+//                    tree.root.setParent(null);
+                } else if (num < tree.root.getValue() && h > H) {
                     JOptionPane.showMessageDialog(null, "2");
+
+
+                    gambi = tree.root.getRight();
+
+
                     Node3D left = tree.balance(tree.root.getLeft());
                     left.setParent(tree.root);
                     tree.root.setLeft(left);
-                }else if(h>H){
+
+                    gambiDirection = tree.RIGTH;
+                } else if (h > H) {
                     JOptionPane.showMessageDialog(null, "3");
+
+
+                    gambi = tree.root.getLeft();
+
+
                     Node3D right = tree.balance(tree.root.getRight());
                     right.setParent(tree.root);
                     tree.root.setRight(right);
-                }
-//                ArrayList<Node3D> allNodes = tree.root.getAllNodes();
-//                allNodes.add(0, tree.root);
-//                tree.root = null;
-//                tree.reinsert(allNodes);
 
+                    gambiDirection = tree.LEFT;
+                }
+                JOptionPane.showMessageDialog(null, "1");
+                tree.root = tree.balance(tree.root);
+                tree.root.setParent(null);
+                if (gambi != null && tree.getHBinaryTree() == 3) {
+                    TransformGroup tgTemp = new TransformGroup(gambi.getTfNode());
+                    float d = (gambi == tree.root) ? tree.DISTANCE / 5 : (tree.DISTANCE / 2) / 5;
+                    Transform3D tf = tree.insert3D(null, gambiDirection, d, true, tgTemp);
+                    gambi.getTgNode().setTransform(tf);
+                }
             }
 
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
