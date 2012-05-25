@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
@@ -1332,14 +1330,12 @@ public class InsertionBinaryTree {
         if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1) {
             if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < -1) {
                 node = doubleLeftRotate(node);
-                System.out.println("Double rotation");
             } else {
                 node = singleLeftRotate(node);
             }
         } else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
             if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 1) {
                 node = doubleRightRotate(node);
-                System.out.println("Double rotation");
             } else {
                 node = singleRightRotate(node);
             }
@@ -1348,7 +1344,6 @@ public class InsertionBinaryTree {
     }
 
     Node3D singleLeftRotate(Node3D node) {
-        JOptionPane.showMessageDialog(null, "Left Rotate");
         if (node == null) {
             return null;
         }
@@ -1463,14 +1458,11 @@ public class InsertionBinaryTree {
 
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "NULL");
         }
         return root;
     }
 
     Node3D singleRightRotate(Node3D node) {
-        JOptionPane.showMessageDialog(null, "Right Rotate!");
-        
          if (node == null) {
             return null;
         }
@@ -1505,7 +1497,6 @@ public class InsertionBinaryTree {
 
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "NULL");
         }
         return root;
         
