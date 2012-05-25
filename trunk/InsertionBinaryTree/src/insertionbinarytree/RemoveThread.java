@@ -31,7 +31,6 @@ public class RemoveThread extends Thread {
             tree.moveView(tree.viewX());
             score = tree.delete(num);
             
-            
             if (tree.isAVL()) {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
