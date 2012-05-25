@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package insertionbinarytree;
 
 import java.awt.Dimension;
@@ -62,31 +58,18 @@ public class InsertThread extends Thread {
 //                    tree.root = tree.balance(tree.root);
 //                    tree.root.setParent(null);
                 } else if (num < tree.root.getValue() && h > H) {
-                    JOptionPane.showMessageDialog(null, "2");
-
-
                     gambi = tree.root.getRight();
-
-
                     Node3D left = tree.balance(tree.root.getLeft());
                     left.setParent(tree.root);
                     tree.root.setLeft(left);
-
                     gambiDirection = tree.RIGTH;
                 } else if (h > H) {
-                    JOptionPane.showMessageDialog(null, "3");
-
-
                     gambi = tree.root.getLeft();
-
-
                     Node3D right = tree.balance(tree.root.getRight());
                     right.setParent(tree.root);
                     tree.root.setRight(right);
-
                     gambiDirection = tree.LEFT;
                 }
-                JOptionPane.showMessageDialog(null, "1");
                 tree.root = tree.balance(tree.root);
                 tree.root.setParent(null);
                 if (gambi != null && tree.getHBinaryTree() == 3) {
