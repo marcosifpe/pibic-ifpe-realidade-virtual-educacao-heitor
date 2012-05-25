@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package insertionbinarytree;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,11 +37,9 @@ public class RemoveThread extends Thread {
                 final int H = 2;
                 JOptionPane.showMessageDialog(null, "h = "+h);
                 if(h==H){
-                    JOptionPane.showMessageDialog(null, "1");
                     tree.root = tree.balance(tree.root);
                     tree.root.setParent(null);
                 }else if(h>H){
-                    JOptionPane.showMessageDialog(null, "else");
                     Node3D right = tree.balance(tree.root.getRight());
                     if(right != null) {
                         right.setParent(tree.root);
@@ -60,8 +53,6 @@ public class RemoveThread extends Thread {
                     tree.root.setLeft(left);
                 }
             }
-            
-            
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
             tree.updateInsertButton();
         } finally {
