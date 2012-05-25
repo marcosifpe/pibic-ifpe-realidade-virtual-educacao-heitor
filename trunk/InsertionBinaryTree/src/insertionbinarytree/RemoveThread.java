@@ -35,7 +35,6 @@ public class RemoveThread extends Thread {
             if (tree.isAVL()) {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
-                JOptionPane.showMessageDialog(null, "h = "+h);
                 if(h==H){
                     tree.root = tree.balance(tree.root);
                     tree.root.setParent(null);

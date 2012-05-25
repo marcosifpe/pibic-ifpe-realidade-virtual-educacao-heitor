@@ -187,7 +187,7 @@ public class InsertionBinaryTree {
     public Node3D root;
     final static float r = 0.1f;
     public ArrayList<Node3D> nodes = new ArrayList<Node3D>();
-    public static final int SLEEP_TIME = 0;
+    public static final int SLEEP_TIME = 40;
     public JTextPane textPane;
     public TransformGroup searchHighlighter, removeHighlighter;
     private SimpleAttributeSet deafaultText = new SimpleAttributeSet();
