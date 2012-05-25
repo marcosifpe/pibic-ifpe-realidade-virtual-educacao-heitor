@@ -35,14 +35,32 @@ public class RemoveThread extends Thread {
             int num = Integer.parseInt(numString);
             tree.moveView(tree.viewX());
             score = tree.delete(num);
-            //tree.root = tree.balance(tree.root);
             
-            /*
-            ArrayList<Node3D> allNodes = tree.root.getAllNodes();
-            allNodes.add(0, tree.root);
-            tree.root = null;
-            tree.reinsert(allNodes);
-            */
+            
+            if (tree.isAVL()) {
+                int h = tree.getHBinaryTree();
+                final int H = 2;
+                JOptionPane.showMessageDialog(null, "h = "+h);
+                if(h==H){
+                    JOptionPane.showMessageDialog(null, "1");
+                    tree.root = tree.balance(tree.root);
+                    tree.root.setParent(null);
+                }else if(h>H){
+                    JOptionPane.showMessageDialog(null, "else");
+                    Node3D right = tree.balance(tree.root.getRight());
+                    if(right != null) {
+                        right.setParent(tree.root);
+                    }
+                    tree.root.setRight(right);
+                    
+                    Node3D left = tree.balance(tree.root.getLeft());
+                    if(left != null){
+                        left.setParent(tree.root);
+                    }
+                    tree.root.setLeft(left);
+                }
+            }
+            
             
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
             tree.updateInsertButton();
