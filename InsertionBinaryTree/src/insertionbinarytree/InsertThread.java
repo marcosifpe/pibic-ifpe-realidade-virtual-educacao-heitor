@@ -50,7 +50,6 @@ public class InsertThread extends Thread {
             if (tree.isAVL()) {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
-                JOptionPane.showMessageDialog(null, "h = " + h);
                 Node3D gambi = null;
                 int gambiDirection = tree.LEFT;
                 if (h == H) {
