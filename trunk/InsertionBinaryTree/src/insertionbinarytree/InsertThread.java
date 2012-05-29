@@ -47,6 +47,8 @@ public class InsertThread extends Thread {
 
             }
         } finally {
+            tree.updateConnections(tree.root, 0);
+            tree.moveView(tree.viewX());
             if (tree.isAVL()) {
                 tree.textPane.setText(InsertionBinaryTree.AVL_CODE);
                 int h = tree.getHBinaryTree();
@@ -79,14 +81,13 @@ public class InsertThread extends Thread {
                     gambi.getTgNode().setTransform(tf);
                 }
                 tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
+                tree.moveView(tree.viewX());
             }
 
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
             tree.updateInsertButton();
 
-
             tree.updateConnections(tree.root, 0);
-            tree.moveView(tree.viewX());
             if (score != null) {
                 score.show(tree.textPane);
             }
