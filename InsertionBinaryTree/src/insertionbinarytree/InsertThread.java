@@ -48,6 +48,7 @@ public class InsertThread extends Thread {
             }
         } finally {
             if (tree.isAVL()) {
+                tree.textPane.setText(InsertionBinaryTree.AVL_CODE);
                 int h = tree.getHBinaryTree();
                 final int H = 2;
                 Node3D gambi = null;
@@ -77,6 +78,7 @@ public class InsertThread extends Thread {
                     Transform3D tf = tree.insert3D(null, gambiDirection, d, true, tgTemp);
                     gambi.getTgNode().setTransform(tf);
                 }
+                tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
             }
 
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
