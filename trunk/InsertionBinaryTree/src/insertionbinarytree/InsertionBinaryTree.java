@@ -182,6 +182,29 @@ public class InsertionBinaryTree {
     public static final String DELETE_CODE = DELETE_TITLE + DELETE + DELETE_IF_NULL + DELETE_ERROR + DELETE_LOWER + DELETE_LEFT + DELETE_GREATER + DELETE_RIGHT
             + DELETE_ELSE + DELETE_EQUALS + DELETE_TEMP1 + DELETE_NODE_L + DELETE_DELETE1 + DELETE_L_LEAF + DELETE_TEMP2 + DELETE_NODE_R + DELETE_DELETE2
             + DELETE_ELSE2 + DELETE_FIND_SUBSTITUTE + DELETE_NODE_MIN + DELETE_TEMP_MIN + DELETE_MIN_RIGHT + DELETE_DEL_TEMP + "   }" + newRow + " }" + newRow + DELETE_RETURN + "}" + newRow + newRow + FIND_CODE;
+    public static final String AVL_TITLE = "Balanceamento de Árvore AVL" + newRow,
+            BALANCE             = "balancear(No no) {" + newRow,
+            BALANCE_IF_NULL     = " se (no == null) {" + newRow,
+            BALANCE_NULL        = "     retorne null;" + newRow,
+            //                      }
+            BALANCE_GREATER     = " se (altura(no.direita) - altura(no.esquerda) > 1) {" + newRow,
+            BALANCE_LOWER       = "     se (altura(no.direita.direita) - altura(no.direita.esquerda) < -1) {" + newRow,
+            BALANCE_DOUBLE_L    = "         no = rotaçãoEsquerdaDupla(no);" + newRow,
+            BALANCE_ELSE        = "     } senão {" + newRow,
+            BALANCE_SINGLE_L    = "         no = rotaçãoEsquerdaSimples(no);" + newRow,
+            //                          }
+            BALANCE_GREATER2    = " } senão se (altura(no.esquerda) - altura(no.direita) > 1) {" + newRow,
+            BALANCE_GREATER3    = "     se (altura(no.esquerda.direita) - altura(no.esquerda.esquerda) > 1) {" + newRow,
+            BALANCE_DOUBLE_R    = "         no = rotaçãoDireitaDupla(no);" + newRow,
+            BALANCE_ELSE2       = "     } senão {" + newRow,
+            BALANCE_SINGLE_R    = "         no = rotaçãoDireitaSimples(no);" + newRow,
+            //                          }
+            //                      }
+            BALANCE_RETURN      = " retorne no;" + newRow;
+//                                 }
+    public final static String AVL_CODE = AVL_TITLE + BALANCE + BALANCE_IF_NULL + BALANCE_NULL + "  }" +newRow+
+            BALANCE_GREATER + BALANCE_LOWER+BALANCE_DOUBLE_L + BALANCE_ELSE + BALANCE_SINGLE_L + "      }"+newRow+BALANCE_GREATER2+
+            BALANCE_GREATER3+BALANCE_DOUBLE_R+BALANCE_ELSE2+BALANCE_SINGLE_R+"      }"+newRow+" }"+newRow+BALANCE_RETURN+"}";
     private static final int NUMBER_OF_VALUES = 15;
     public static final int LEFT = -1, RIGTH = 1;
     public Node3D root;
@@ -206,7 +229,6 @@ public class InsertionBinaryTree {
         this.balanced = balanced;
     }
 
-    
     public boolean isAVL() {
         return balanced;
     }
@@ -1413,24 +1435,24 @@ public class InsertionBinaryTree {
             oldRight = node.getRight();
             p = node.getRight().getLeft();
             node.getRight().setLeft(null);
-            if(p==null){
-                p=node.getRight();
-            }else{
+            if (p == null) {
+                p = node.getRight();
+            } else {
                 p.setRight(node.getRight());
             }
             node.setRight(null);
             //node.setRight(p.getLeft());
             p.setLeft(node);
-            
-            if(p.getRight()!=null && p.getRight()!=oldRight){
+
+            if (p.getRight() != null && p.getRight() != oldRight) {
                 p.getRight().getTgNode().setTransform(p.getTfNode());
             }
             p.getTgNode().setTransform(node.getTfNode());
-            
+
             TransformGroup tgTemp = new TransformGroup(node.getTfNode());
-            float d = (node == root) ? DISTANCE/5 : (DISTANCE/2)/5;
+            float d = (node == root) ? DISTANCE / 5 : (DISTANCE / 2) / 5;
             Transform3D tf = insert3D(null, LEFT, d, true, tgTemp);
-            
+
             node.getTgNode().setTransform(tf);
 //            
 //            Transform3D tfNode = node.getTfNode();
@@ -1463,7 +1485,7 @@ public class InsertionBinaryTree {
     }
 
     Node3D singleRightRotate(Node3D node) {
-         if (node == null) {
+        if (node == null) {
             return null;
         }
 
@@ -1473,24 +1495,24 @@ public class InsertionBinaryTree {
             oldLeft = node.getLeft();
             p = node.getLeft().getRight();
             node.getLeft().setRight(null);
-            if(p==null){
-                p=node.getLeft();
-            }else{
+            if (p == null) {
+                p = node.getLeft();
+            } else {
                 p.setLeft(node.getLeft());
             }
             node.setLeft(null);
             //node.setRight(p.getLeft());
             p.setRight(node);
-            
-            if(p.getLeft()!=null && p.getLeft()!=oldLeft){
+
+            if (p.getLeft() != null && p.getLeft() != oldLeft) {
                 p.getLeft().getTgNode().setTransform(p.getTfNode());
             }
             p.getTgNode().setTransform(node.getTfNode());
-            
+
             TransformGroup tgTemp = new TransformGroup(node.getTfNode());
-            float d = (node == root) ? DISTANCE/5 : (DISTANCE/2)/5;
+            float d = (node == root) ? DISTANCE / 5 : (DISTANCE / 2) / 5;
             Transform3D tf = insert3D(null, RIGTH, d, true, tgTemp);
-            
+
             node.getTgNode().setTransform(tf);
 
             return p;
@@ -1499,39 +1521,29 @@ public class InsertionBinaryTree {
             ex.printStackTrace();
         }
         return root;
-        
+
         /*
-        try {
-            Node3D p;
-            p = node.getLeft();
-            Transform3D pTf = null;
-            if (p != null) {
-                pTf = p.getTfNode();
-            }
-
-
-            node.setLeft(p.getRight());
-            p.setRight(node);
-            return p;
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        }
-        return root;
-        * 
-        */
+         * try { Node3D p; p = node.getLeft(); Transform3D pTf = null; if (p !=
+         * null) { pTf = p.getTfNode(); }
+         *
+         *
+         * node.setLeft(p.getRight()); p.setRight(node); return p; } catch
+         * (NullPointerException ex) { ex.printStackTrace(); } return root;
+         *
+         */
     }
 
     Node3D doubleLeftRotate(Node3D node) {
         Node3D parent = node.getParent();
         Node3D temp = node;
         node = singleRightRotate(node.getRight());
-        if(parent!=null){
-            if(parent.getLeft()==node){
+        if (parent != null) {
+            if (parent.getLeft() == node) {
                 parent.setLeft(node);
-            }else{
+            } else {
                 parent.setRight(node);
             }
-        }else if(temp == root){
+        } else if (temp == root) {
             root = node;
         }
         node = singleLeftRotate(node);
@@ -1542,13 +1554,13 @@ public class InsertionBinaryTree {
         Node3D parent = node.getParent();
         Node3D temp = node;
         node = singleLeftRotate(node.getLeft());
-        if(parent!=null){
-            if(parent.getLeft()==node){
+        if (parent != null) {
+            if (parent.getLeft() == node) {
                 parent.setLeft(node);
-            }else{
+            } else {
                 parent.setRight(node);
             }
-        }else if(temp == root){
+        } else if (temp == root) {
             root = node;
         }
         node = singleRightRotate(node);
