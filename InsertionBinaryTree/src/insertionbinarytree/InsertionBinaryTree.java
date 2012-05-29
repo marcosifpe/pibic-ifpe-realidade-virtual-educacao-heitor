@@ -182,7 +182,7 @@ public class InsertionBinaryTree {
     public static final String DELETE_CODE = DELETE_TITLE + DELETE + DELETE_IF_NULL + DELETE_ERROR + DELETE_LOWER + DELETE_LEFT + DELETE_GREATER + DELETE_RIGHT
             + DELETE_ELSE + DELETE_EQUALS + DELETE_TEMP1 + DELETE_NODE_L + DELETE_DELETE1 + DELETE_L_LEAF + DELETE_TEMP2 + DELETE_NODE_R + DELETE_DELETE2
             + DELETE_ELSE2 + DELETE_FIND_SUBSTITUTE + DELETE_NODE_MIN + DELETE_TEMP_MIN + DELETE_MIN_RIGHT + DELETE_DEL_TEMP + "   }" + newRow + " }" + newRow + DELETE_RETURN + "}" + newRow + newRow + FIND_CODE;
-    public static final String AVL_TITLE = "Balanceamento de Árvore AVL" + newRow,
+    public static final String AVL_TITLE = "Balanceamento de Árvore AVL" + newRow +newRow,
             BALANCE             = "balancear(No no) {" + newRow,
             BALANCE_IF_NULL     = " se (no == null) {" + newRow,
             BALANCE_NULL        = "     retorne null;" + newRow,
@@ -196,7 +196,7 @@ public class InsertionBinaryTree {
             BALANCE_GREATER2    = " } senão se (altura(no.esquerda) - altura(no.direita) > 1) {" + newRow,
             BALANCE_GREATER3    = "     se (altura(no.esquerda.direita) - altura(no.esquerda.esquerda) > 1) {" + newRow,
             BALANCE_DOUBLE_R    = "         no = rotaçãoDireitaDupla(no);" + newRow,
-            BALANCE_ELSE2       = "     } senão {" + newRow,
+            BALANCE_ELSE2       = "     }senão {" + newRow,
             BALANCE_SINGLE_R    = "         no = rotaçãoDireitaSimples(no);" + newRow,
             //                          }
             //                      }
@@ -1345,23 +1345,42 @@ public class InsertionBinaryTree {
     }
 
     public Node3D balance(Node3D node) {
+        //highlightsText(AVL_TITLE, AVL_CODE);
+        highlightsText(BALANCE, AVL_CODE);
+        highlightsText(BALANCE_IF_NULL, AVL_CODE);
         if (node == null) {
+            highlightsText(BALANCE_NULL, AVL_CODE);
             return null;
         }
-
+        boolean greater2Highlighted = false;
+        highlightsText(BALANCE_GREATER, AVL_CODE);
         if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1) {
+            highlightsText(BALANCE_LOWER, AVL_CODE);
             if (this.getHBinaryTree(node.getRight().getRight()) - this.getHBinaryTree(node.getRight().getLeft()) < -1) {
+                highlightsText(BALANCE_DOUBLE_L, AVL_CODE);
                 node = doubleLeftRotate(node);
             } else {
+                highlightsText(BALANCE_ELSE, AVL_CODE);
+                highlightsText(BALANCE_SINGLE_L, AVL_CODE);
                 node = singleLeftRotate(node);
             }
         } else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
+            highlightsText(BALANCE_GREATER2, AVL_CODE);
+            greater2Highlighted=true;
+            highlightsText(BALANCE_GREATER3, AVL_CODE);
             if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 1) {
+                highlightsText(BALANCE_DOUBLE_R, AVL_CODE);
                 node = doubleRightRotate(node);
             } else {
+                highlightsText(BALANCE_ELSE2, AVL_CODE);
+                highlightsText(BALANCE_SINGLE_R, AVL_CODE);
                 node = singleRightRotate(node);
             }
         }
+        if(!greater2Highlighted){
+            highlightsText(BALANCE_GREATER2, AVL_CODE);
+        }
+        highlightsText(BALANCE_RETURN, AVL_CODE);
         return node;
     }
 
@@ -1475,11 +1494,12 @@ public class InsertionBinaryTree {
 //            }
 //            nNode.setLeft(node);
 //            return nNode;
-
+            updateConnections(root, 0);
             return p;
 
         } catch (NullPointerException ex) {
             ex.printStackTrace();
+            updateConnections(root, 0);
         }
         return root;
     }
@@ -1514,11 +1534,12 @@ public class InsertionBinaryTree {
             Transform3D tf = insert3D(null, RIGTH, d, true, tgTemp);
 
             node.getTgNode().setTransform(tf);
-
+            updateConnections(root, 0);
             return p;
 
         } catch (NullPointerException ex) {
             ex.printStackTrace();
+            updateConnections(root, 0);
         }
         return root;
 
