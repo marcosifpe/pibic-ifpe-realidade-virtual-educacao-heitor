@@ -27,7 +27,7 @@ public class InitialFrame extends JFrame implements Runnable {
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        JButton balanced = new JButton("Árvore Binária Balanceada");
+        JButton balanced = new JButton("Árvore AVL");
 
         balanced.addActionListener(new ActionListener() {
 
@@ -38,7 +38,7 @@ public class InitialFrame extends JFrame implements Runnable {
             }
         });
 
-        JButton notBalanced = new JButton("Árvore Binária não Balanceada");
+        JButton notBalanced = new JButton("Árvore Binária");
 
         notBalanced.addActionListener(new ActionListener() {
 
