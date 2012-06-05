@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package insertionbinarytree;
 
 import com.sun.j3d.utils.geometry.Box;
@@ -11,8 +7,8 @@ import com.sun.j3d.utils.image.ImageException;
 import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Color;
 import java.awt.Font;
-import javax.imageio.IIOException;
 import javax.media.j3d.*;
+import javax.swing.JOptionPane;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
@@ -46,7 +42,7 @@ public class Object3DFactory {
         tfHighlighter.rotX(Math.toRadians(90));
 
         TransformGroup tgHighlighter = new TransformGroup(tfHighlighter);
-        Cylinder cy = new Cylinder(highlighterR, highlighterH, createAppearance(color, true));
+        Cylinder cy = new Cylinder(highlighterR, highlighterH, createAppearance(color, true, null));
 
         tgHighlighter.addChild(cy);
 
@@ -68,7 +64,7 @@ public class Object3DFactory {
     }
 
     public Node3D getNode3D() {
-        Sphere sphere = new Sphere(InsertionBinaryTree.r, Sphere.GENERATE_NORMALS, 100, createAppearance(Color.BLACK, false));
+        Sphere sphere = new Sphere(InsertionBinaryTree.r, Sphere.GENERATE_NORMALS, 100, createAppearance(Color.BLACK, false,"folha.png"));
         sphere.setCapability(Sphere.ENABLE_APPEARANCE_MODIFY);
         Transform3D tfNode = new Transform3D();
         tfNode.setTranslation(new Vector3f(0.0f, yInitial, 0.0f));
@@ -88,7 +84,7 @@ public class Object3DFactory {
         text3d.setCapability(Text3D.ALLOW_STRING_READ);
 
         Shape3D textShape = new Shape3D(text3d);
-        textShape.setAppearance(createAppearance(Color.WHITE, true));
+        textShape.setAppearance(createAppearance(Color.WHITE, true, null));
 
         Transform3D tfText = new Transform3D();
         tfText.setScale(InsertionBinaryTree.r * 2 - 0.1f);
@@ -168,7 +164,8 @@ public class Object3DFactory {
 
     private TransformGroup createNodeConnection(double hypot, double angle, boolean rotY) {
         Color brown = new Color(139, 69, 19);
-        Appearance app = getInstance().createAppearance(brown, true);
+        //Se usar textura, estoura a memoria (em um pc com 6gb de ram)
+        Appearance app = getInstance().createAppearance(brown, true, "wood.png");
         Box box = new Box(0.02f, (float) hypot / 2, 0.02f, app);
         
         
@@ -180,7 +177,7 @@ public class Object3DFactory {
         tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         tgLeaf.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
         tgLeaf.setTransform(tfLeaf);
-        Box leaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false));
+        Box leaf = new Box(leafSize, leafSize, leafSize, createAppearance(Color.green, false, "folha.png"));
         tgLeaf.addChild(leaf);
         
         //-----------------------------
@@ -211,13 +208,14 @@ public class Object3DFactory {
         return tg;
     }
 
-    Appearance createAppearance(Color color, boolean noTexture) {
+    Appearance createAppearance(Color color, boolean noTexture, String texture) {
         Appearance app = new Appearance();
         app.setColoringAttributes(new ColoringAttributes(new Color3f(color), 1));
 
         if (!noTexture) {
             try{
-                app.setTexture(createTexture("folha.png"));
+                //app.setTexture(createTexture("folha.png"));
+                app.setTexture(createTexture(texture));
             }catch(ImageException ex){
                 app.setColoringAttributes(new ColoringAttributes(new Color3f(0.0f, 0.3f, 0.0f), 1));
             }
