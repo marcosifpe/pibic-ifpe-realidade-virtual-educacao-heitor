@@ -60,7 +60,7 @@ public class InitialFrame extends JFrame implements Runnable {
 
         this.getContentPane().add(balanced);
         this.getContentPane().add(notBalanced);
-        //this.getContentPane().add(sort);
+        this.getContentPane().add(sort);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         t = new Thread(this);
