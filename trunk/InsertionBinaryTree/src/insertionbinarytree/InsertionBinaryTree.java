@@ -182,29 +182,29 @@ public class InsertionBinaryTree {
     public static final String DELETE_CODE = DELETE_TITLE + DELETE + DELETE_IF_NULL + DELETE_ERROR + DELETE_LOWER + DELETE_LEFT + DELETE_GREATER + DELETE_RIGHT
             + DELETE_ELSE + DELETE_EQUALS + DELETE_TEMP1 + DELETE_NODE_L + DELETE_DELETE1 + DELETE_L_LEAF + DELETE_TEMP2 + DELETE_NODE_R + DELETE_DELETE2
             + DELETE_ELSE2 + DELETE_FIND_SUBSTITUTE + DELETE_NODE_MIN + DELETE_TEMP_MIN + DELETE_MIN_RIGHT + DELETE_DEL_TEMP + "   }" + newRow + " }" + newRow + DELETE_RETURN + "}" + newRow + newRow + FIND_CODE;
-    public static final String AVL_TITLE = "Balanceamento de Árvore AVL" + newRow +newRow,
-            BALANCE             = "balancear(No no) {" + newRow,
-            BALANCE_IF_NULL     = " se (no == null) {" + newRow,
-            BALANCE_NULL        = "     retorne null;" + newRow,
+    public static final String AVL_TITLE = "Balanceamento de Árvore AVL" + newRow + newRow,
+            BALANCE = "balancear(No no) {" + newRow,
+            BALANCE_IF_NULL = " se (no == null) {" + newRow,
+            BALANCE_NULL = "     retorne null;" + newRow,
             //                      }
-            BALANCE_GREATER     = " se (altura(no.direita) - altura(no.esquerda) > 1) {" + newRow,
-            BALANCE_LOWER       = "     se (altura(no.direita.direita) - altura(no.direita.esquerda) < -1) {" + newRow,
-            BALANCE_DOUBLE_L    = "         no = rotaçãoEsquerdaDupla(no);" + newRow,
-            BALANCE_ELSE        = "     } senão {" + newRow,
-            BALANCE_SINGLE_L    = "         no = rotaçãoEsquerdaSimples(no);" + newRow,
+            BALANCE_GREATER = " se (altura(no.direita) - altura(no.esquerda) > 1) {" + newRow,
+            BALANCE_LOWER = "     se (altura(no.direita.direita) - altura(no.direita.esquerda) < -1) {" + newRow,
+            BALANCE_DOUBLE_L = "         no = rotaçãoEsquerdaDupla(no);" + newRow,
+            BALANCE_ELSE = "     } senão {" + newRow,
+            BALANCE_SINGLE_L = "         no = rotaçãoEsquerdaSimples(no);" + newRow,
             //                          }
-            BALANCE_GREATER2    = " } senão se (altura(no.esquerda) - altura(no.direita) > 1) {" + newRow,
-            BALANCE_GREATER3    = "     se (altura(no.esquerda.direita) - altura(no.esquerda.esquerda) > 1) {" + newRow,
-            BALANCE_DOUBLE_R    = "         no = rotaçãoDireitaDupla(no);" + newRow,
-            BALANCE_ELSE2       = "     }senão {" + newRow,
-            BALANCE_SINGLE_R    = "         no = rotaçãoDireitaSimples(no);" + newRow,
+            BALANCE_GREATER2 = " } senão se (altura(no.esquerda) - altura(no.direita) > 1) {" + newRow,
+            BALANCE_GREATER3 = "     se (altura(no.esquerda.direita) - altura(no.esquerda.esquerda) > 1) {" + newRow,
+            BALANCE_DOUBLE_R = "         no = rotaçãoDireitaDupla(no);" + newRow,
+            BALANCE_ELSE2 = "     }senão {" + newRow,
+            BALANCE_SINGLE_R = "         no = rotaçãoDireitaSimples(no);" + newRow,
             //                          }
             //                      }
-            BALANCE_RETURN      = " retorne no;" + newRow;
+            BALANCE_RETURN = " retorne no;" + newRow;
 //                                 }
-    public final static String AVL_CODE = AVL_TITLE + BALANCE + BALANCE_IF_NULL + BALANCE_NULL + "  }" +newRow+
-            BALANCE_GREATER + BALANCE_LOWER+BALANCE_DOUBLE_L + BALANCE_ELSE + BALANCE_SINGLE_L + "      }"+newRow+BALANCE_GREATER2+
-            BALANCE_GREATER3+BALANCE_DOUBLE_R+BALANCE_ELSE2+BALANCE_SINGLE_R+"      }"+newRow+" }"+newRow+BALANCE_RETURN+"}";
+    public final static String AVL_CODE = AVL_TITLE + BALANCE + BALANCE_IF_NULL + BALANCE_NULL + "  }" + newRow
+            + BALANCE_GREATER + BALANCE_LOWER + BALANCE_DOUBLE_L + BALANCE_ELSE + BALANCE_SINGLE_L + "      }" + newRow + BALANCE_GREATER2
+            + BALANCE_GREATER3 + BALANCE_DOUBLE_R + BALANCE_ELSE2 + BALANCE_SINGLE_R + "      }" + newRow + " }" + newRow + BALANCE_RETURN + "}";
     private static final int NUMBER_OF_VALUES = 15;
     public static final int LEFT = -1, RIGTH = 1;
     public Node3D root;
@@ -454,7 +454,7 @@ public class InsertionBinaryTree {
 
     private void balanceAction() {
         Transform3D tfTemp = root.getTfNode();
-        root = balance(root);
+        root = balance(root, new Score());
         root.getTgNode().setTransform(tfTemp);
         moveNodes(root);
         updateConnections(root, 0);
@@ -1344,9 +1344,10 @@ public class InsertionBinaryTree {
         return score;
     }
 
-    public Node3D balance(Node3D node) {
+    public Node3D balance(Node3D node, Score score) {
         //highlightsText(AVL_TITLE, AVL_CODE);
         highlightsText(BALANCE, AVL_CODE);
+        askAboutAVL(node, score);
         highlightsText(BALANCE_IF_NULL, AVL_CODE);
         if (node == null) {
             highlightsText(BALANCE_NULL, AVL_CODE);
@@ -1366,7 +1367,7 @@ public class InsertionBinaryTree {
             }
         } else if (this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
             highlightsText(BALANCE_GREATER2, AVL_CODE);
-            greater2Highlighted=true;
+            greater2Highlighted = true;
             highlightsText(BALANCE_GREATER3, AVL_CODE);
             if (this.getHBinaryTree(node.getLeft().getRight()) - this.getHBinaryTree(node.getLeft().getLeft()) > 1) {
                 highlightsText(BALANCE_DOUBLE_R, AVL_CODE);
@@ -1377,11 +1378,50 @@ public class InsertionBinaryTree {
                 node = singleRightRotate(node);
             }
         }
-        if(!greater2Highlighted){
+        if (!greater2Highlighted) {
             highlightsText(BALANCE_GREATER2, AVL_CODE);
         }
         highlightsText(BALANCE_RETURN, AVL_CODE);
         return node;
+    }
+
+    void askAboutAVL(Node3D node, Score score) {
+        final String YES = "Sim", NO = "Não";
+        String correct = NO;
+        if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1
+                || this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
+            correct = YES;
+        }
+        int answer;
+        String[] options = {YES, NO};
+        boolean repeatQuestion = false;
+        int cont = 0;
+
+        do {
+            answer = JOptionPane.showOptionDialog(textPane, "Haverá balanceamento?", "Pergunta",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+
+            //se a janela for fechada
+            if (answer == -1) {
+                repeatQuestion = true;
+            } else { //se errou
+                if (options[answer] == null ? correct != null : !options[answer].equals(correct)) {
+
+                    JOptionPane.showMessageDialog(textPane, "Resposta incorreta!");
+                    repeatQuestion = true;
+                } else { //se acertou
+
+                    repeatQuestion = false;
+                }
+            }
+            cont++;
+        } while (repeatQuestion);
+        if (cont == 1) {
+            score.addCorrect();
+            score.addTotal();
+        } else {
+            score.addTotal();
+        }
     }
 
     Node3D singleLeftRotate(Node3D node) {

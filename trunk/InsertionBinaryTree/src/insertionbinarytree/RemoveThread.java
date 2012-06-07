@@ -29,6 +29,9 @@ public class RemoveThread extends Thread {
             tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
             tree.textPane.setText(InsertionBinaryTree.DELETE_CODE);
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja Remover?");
+            if(numString == null){
+                return;
+            }
             int num = Integer.parseInt(numString);
             tree.moveView(tree.viewX());
             score = tree.delete(num);
@@ -59,30 +62,30 @@ public class RemoveThread extends Thread {
                 int h = tree.getHBinaryTree();
                 final int H = 2;
                 Node3D n = null;
-                int gambiDirection = tree.LEFT;
+                int direction = tree.LEFT;
                 if (h == H) {
 //                    JOptionPane.showMessageDialog(null, "1");
 //                    tree.root = tree.balance(tree.root);
 //                    tree.root.setParent(null);
                 } else if (h > H) {
                     n = tree.root.getRight();
-                    Node3D left = tree.balance(tree.root.getLeft());
+                    Node3D left = tree.balance(tree.root.getLeft(), score);
                     left.setParent(tree.root);
                     tree.root.setLeft(left);
-                    gambiDirection = tree.RIGTH;
+                    direction = tree.RIGTH;
                 
                     n = tree.root.getLeft();
-                    Node3D right = tree.balance(tree.root.getRight());
+                    Node3D right = tree.balance(tree.root.getRight(), score);
                     right.setParent(tree.root);
                     tree.root.setRight(right);
-                    gambiDirection = tree.LEFT;
+                    direction = tree.LEFT;
                 }
-                tree.root = tree.balance(tree.root);
+                tree.root = tree.balance(tree.root, score);
                 tree.root.setParent(null);
                 if (n != null && tree.getHBinaryTree() == 3) {
                     TransformGroup tgTemp = new TransformGroup(n.getTfNode());
                     float d = (n == tree.root) ? tree.DISTANCE / 5 : (tree.DISTANCE / 2) / 5;
-                    Transform3D tf = tree.insert3D(null, gambiDirection, d, true, tgTemp);
+                    Transform3D tf = tree.insert3D(null, direction, d, true, tgTemp);
                     n.getTgNode().setTransform(tf);
                 }
                 tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);

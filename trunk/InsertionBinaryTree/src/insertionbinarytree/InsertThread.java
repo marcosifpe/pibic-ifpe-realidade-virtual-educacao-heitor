@@ -32,6 +32,10 @@ public class InsertThread extends Thread {
             tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
             tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja inserir?");
+            if(numString == null){
+                return;
+            }
+            
             num = Integer.parseInt(numString);
 
 
@@ -46,44 +50,49 @@ public class InsertThread extends Thread {
                 score = tree.insertValue(num);
 
             }
-        } finally {
+            
+            
+            
+            
             tree.updateConnections(tree.root, 0);
             tree.moveView(tree.viewX());
             if (tree.isAVL()) {
                 tree.textPane.setText(InsertionBinaryTree.AVL_CODE);
-                int h = tree.getHBinaryTree();
+                int height = tree.getHBinaryTree();
                 final int H = 2;
                 Node3D n = null;
-                int gambiDirection = tree.LEFT;
-                if (h == H) {
+                int direction = tree.LEFT;
+                if (height == H) {
 //                    JOptionPane.showMessageDialog(null, "1");
 //                    tree.root = tree.balance(tree.root);
 //                    tree.root.setParent(null);
-                } else if (num < tree.root.getValue() && h > H) {
+                } else if (num < tree.root.getValue() && height > H) {
                     n = tree.root.getRight();
-                    Node3D left = tree.balance(tree.root.getLeft());
+                    Node3D left = tree.balance(tree.root.getLeft(), score);
                     left.setParent(tree.root);
                     tree.root.setLeft(left);
-                    gambiDirection = tree.RIGTH;
-                } else if (h > H) {
+                    direction = tree.RIGTH;
+                } else if (height > H) {
                     n = tree.root.getLeft();
-                    Node3D right = tree.balance(tree.root.getRight());
+                    Node3D right = tree.balance(tree.root.getRight(), score);
                     right.setParent(tree.root);
                     tree.root.setRight(right);
-                    gambiDirection = tree.LEFT;
+                    direction = tree.LEFT;
                 }
-                tree.root = tree.balance(tree.root);
+                tree.root = tree.balance(tree.root, score);
                 tree.root.setParent(null);
                 if (n != null && tree.getHBinaryTree() == 3) {
                     TransformGroup tgTemp = new TransformGroup(n.getTfNode());
                     float d = (n == tree.root) ? tree.DISTANCE / 5 : (tree.DISTANCE / 2) / 5;
-                    Transform3D tf = tree.insert3D(null, gambiDirection, d, true, tgTemp);
+                    Transform3D tf = tree.insert3D(null, direction, d, true, tgTemp);
                     n.getTgNode().setTransform(tf);
                 }
                 tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
                 tree.moveView(tree.viewX());
             }
-
+        } finally {
+            
+            tree.moveView(tree.viewX());
             tree.clearHighlight(tree.textPane, InsertionBinaryTree.INSERT_CODE);
             tree.updateInsertButton();
 
