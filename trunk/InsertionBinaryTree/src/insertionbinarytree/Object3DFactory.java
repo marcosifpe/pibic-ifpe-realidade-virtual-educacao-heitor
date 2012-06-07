@@ -8,7 +8,6 @@ import com.sun.j3d.utils.image.TextureLoader;
 import java.awt.Color;
 import java.awt.Font;
 import javax.media.j3d.*;
-import javax.swing.JOptionPane;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;

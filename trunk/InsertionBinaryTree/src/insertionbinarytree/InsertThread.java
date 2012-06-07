@@ -53,20 +53,20 @@ public class InsertThread extends Thread {
                 tree.textPane.setText(InsertionBinaryTree.AVL_CODE);
                 int h = tree.getHBinaryTree();
                 final int H = 2;
-                Node3D gambi = null;
+                Node3D n = null;
                 int gambiDirection = tree.LEFT;
                 if (h == H) {
 //                    JOptionPane.showMessageDialog(null, "1");
 //                    tree.root = tree.balance(tree.root);
 //                    tree.root.setParent(null);
                 } else if (num < tree.root.getValue() && h > H) {
-                    gambi = tree.root.getRight();
+                    n = tree.root.getRight();
                     Node3D left = tree.balance(tree.root.getLeft());
                     left.setParent(tree.root);
                     tree.root.setLeft(left);
                     gambiDirection = tree.RIGTH;
                 } else if (h > H) {
-                    gambi = tree.root.getLeft();
+                    n = tree.root.getLeft();
                     Node3D right = tree.balance(tree.root.getRight());
                     right.setParent(tree.root);
                     tree.root.setRight(right);
@@ -74,11 +74,11 @@ public class InsertThread extends Thread {
                 }
                 tree.root = tree.balance(tree.root);
                 tree.root.setParent(null);
-                if (gambi != null && tree.getHBinaryTree() == 3) {
-                    TransformGroup tgTemp = new TransformGroup(gambi.getTfNode());
-                    float d = (gambi == tree.root) ? tree.DISTANCE / 5 : (tree.DISTANCE / 2) / 5;
+                if (n != null && tree.getHBinaryTree() == 3) {
+                    TransformGroup tgTemp = new TransformGroup(n.getTfNode());
+                    float d = (n == tree.root) ? tree.DISTANCE / 5 : (tree.DISTANCE / 2) / 5;
                     Transform3D tf = tree.insert3D(null, gambiDirection, d, true, tgTemp);
-                    gambi.getTgNode().setTransform(tf);
+                    n.getTgNode().setTransform(tf);
                 }
                 tree.textPane.setText(InsertionBinaryTree.INSERT_CODE);
                 tree.moveView(tree.viewX());
