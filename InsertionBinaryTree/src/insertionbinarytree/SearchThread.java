@@ -31,6 +31,9 @@ public class SearchThread extends Thread {
             tree.textPane.setPreferredSize(new Dimension(InsertionBinaryTree.TEXT_AREA_COLUMNS, InsertionBinaryTree.TEXT_AREA_ROWS));
             tree.textPane.setText(InsertionBinaryTree.SEARCH_CODE);
             String numString = JOptionPane.showInputDialog(tree.textPane, "Qual elemento deseja buscar?");
+            if(numString == null){
+                return;
+            }
             int num = Integer.parseInt(numString);
             tree.moveView(tree.viewX());
             score = tree.search(num);
