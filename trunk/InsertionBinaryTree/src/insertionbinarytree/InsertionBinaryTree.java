@@ -715,7 +715,7 @@ public class InsertionBinaryTree {
 
         float x = translation.x;
         float y = translation.y;
-        System.out.println("y=" + y + " | x=" + x);
+        //System.out.println("y=" + y + " | x=" + x);
         float cont = 0.0f;
 
         while (true) {
@@ -754,7 +754,7 @@ public class InsertionBinaryTree {
             tfNode.setTranslation(translation);
             tgNode.setTransform(tfNode);
         }
-        System.out.println("y=" + y + " | x=" + x);
+        //System.out.println("y=" + y + " | x=" + x);
         return tfNode;
     }
 
@@ -1347,6 +1347,7 @@ public class InsertionBinaryTree {
     public Node3D balance(Node3D node, Score score) {
         //highlightsText(AVL_TITLE, AVL_CODE);
         highlightsText(BALANCE, AVL_CODE);
+        setBalanceVars(node);
         askAboutAVL(node, score);
         highlightsText(BALANCE_IF_NULL, AVL_CODE);
         if (node == null) {
@@ -1383,6 +1384,10 @@ public class InsertionBinaryTree {
         }
         highlightsText(BALANCE_RETURN, AVL_CODE);
         return node;
+    }
+
+    public JTextArea getVars() {
+        return this.vars;
     }
 
     void askAboutAVL(Node3D node, Score score) {
@@ -1693,6 +1698,34 @@ public class InsertionBinaryTree {
             moveBalance(temp.getRight(), ySign, xSign, hSum);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void setBalanceVars(Node3D node) {
+        if (node == null) {
+            this.vars.setText("no = null");
+        } else {
+            this.vars.setText("no = " + node.getValue());
+            if (node.getLeft() == null) {
+                this.vars.append("\nno.esquerda = null");
+            } else {
+                this.vars.append("\nno.esquerda = " + node.getLeft().getValue());
+                if (node.getLeft().getLeft() == null) {
+                    this.vars.append("\nno.esquerda.esquerda = null");
+                } else {
+                    this.vars.append("\nno.esquerda.esquerda = " + node.getLeft().getLeft().getValue());
+                }
+            }
+            if (node.getRight() == null) {
+                this.vars.append("\nno.direita = null");
+            } else {
+                this.vars.append("\nno.direita = " + node.getRight().getValue());
+                if (node.getRight().getRight() == null) {
+                    this.vars.append("\nno.direita.direita = null");
+                } else {
+                    this.vars.append("\nno.direita.direita = " + node.getRight().getRight());
+                }
+            }
         }
     }
 }
