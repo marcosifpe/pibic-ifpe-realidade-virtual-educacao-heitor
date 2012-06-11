@@ -80,7 +80,6 @@ public class InitialFrame extends JFrame implements Runnable {
     }
 
     public void run() {
-        System.out.println("running");
 
         Component[] components = this.getContentPane().getComponents();
         for (Component c : components) {

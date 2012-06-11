@@ -100,6 +100,7 @@ public class InsertThread extends Thread {
             if (score != null) {
                 score.show(tree.textPane);
             }
+            tree.getVars().setText("");
             tree.isRunning = false;
         }
     }

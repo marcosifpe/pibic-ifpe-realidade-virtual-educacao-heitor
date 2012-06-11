@@ -11,6 +11,6 @@ public class Main {
     public static void main (String args[]){
         String x = "teste X teste";
         x = x.replaceFirst("X teste", "testado");
-        System.out.println(x);
+        //System.out.println(x);
     }
 }
