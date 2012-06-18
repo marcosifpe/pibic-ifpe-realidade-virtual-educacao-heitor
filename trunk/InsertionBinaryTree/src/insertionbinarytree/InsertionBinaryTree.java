@@ -467,7 +467,7 @@ public class InsertionBinaryTree {
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JMenuBar menuBar = createMenuBar(frame.getJMenuBar());
+        JMenuBar menuBar = createMenuBar();
         frame.setJMenuBar(menuBar);
 
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
@@ -1246,11 +1246,11 @@ public class InsertionBinaryTree {
         vars.setText(varsText);
     }
 
-    private JMenuBar createMenuBar(JMenuBar menuBar) {
-    //    JMenuBar menuBar = new JMenuBar();
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Explicações");
         menu.setMnemonic(KeyEvent.VK_F1);
-
+        
         menuBar.add(menu);
 
         JMenuItem menuItem = new JMenuItem("Inserção", KeyEvent.VK_I);
