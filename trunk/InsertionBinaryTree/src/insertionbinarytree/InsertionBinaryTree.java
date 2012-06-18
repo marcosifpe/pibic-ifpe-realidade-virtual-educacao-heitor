@@ -63,6 +63,7 @@ public class InsertionBinaryTree {
             + "senão, verifica se o próximo nó a esquerda é um nó folha, se for troca o nó pelo próximo nó a direita, "
             + "senão, troca o valor do nó pelo valor do menor nó dos maiores (nó mais a esquerda, dentre os nós da direita), e remove o menor nó dos maiores.";
     public static final String LEFT_NEXT_MOV = "ESQUERDA", RIGHT_NEXT_MOV = "DIREITA";
+    private JFrame frame;
     private SimpleUniverse universe;
     public final static int TEXT_AREA_ROWS = 500,
             TEXT_AREA_COLUMNS = 353;
@@ -460,8 +461,9 @@ public class InsertionBinaryTree {
         updateConnections(root, 0);
     }
 
-    private void createFrame() {
-        JFrame frame = new JFrame("Binary Tree");
+    private void createFrame(JFrame frame) {
+        //JFrame frame = new JFrame("Binary Tree");
+        frame.setTitle("Binary Tree");
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -540,7 +542,7 @@ public class InsertionBinaryTree {
 
         frame.setSize(800, 640);
         frame.setVisible(true);
-
+        System.out.println("ok");
         OrbitBehavior ob = new OrbitBehavior(canvas);
         ob.setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE));
         universe.getViewingPlatform().setViewPlatformBehavior(ob);
@@ -1281,8 +1283,9 @@ public class InsertionBinaryTree {
 
         return menuBar;
     }
-
-    public void init() {
+    
+    public void init(JFrame frame) {
+        this.frame = frame;
         //Cor e background do texto não destacado
         StyleConstants.setForeground(deafaultText, Color.black);
         StyleConstants.setBackground(deafaultText, Color.white);
@@ -1290,7 +1293,7 @@ public class InsertionBinaryTree {
         StyleConstants.setForeground(highlightedText, Color.blue);
         StyleConstants.setBackground(highlightedText, Color.yellow);
 
-        createFrame();
+        createFrame(frame);
     }
 
     private void showInfo(String title, String info) {
