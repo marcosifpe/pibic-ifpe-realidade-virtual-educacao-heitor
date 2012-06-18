@@ -70,7 +70,8 @@ public class InitialFrame extends JFrame implements Runnable {
 
     private void startTree(boolean balanced) {
         InsertionBinaryTree tree = new InsertionBinaryTree(balanced);
-        tree.init();
+        this.getContentPane().removeAll();
+        tree.init(this);
     }
 
     public enum Enviroment {
