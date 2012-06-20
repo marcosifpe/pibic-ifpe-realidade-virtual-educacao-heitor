@@ -1393,6 +1393,9 @@ public class InsertionBinaryTree {
     }
 
     void askAboutAVL(Node3D node, Score score) {
+        if(node == null){
+            return;
+        }
         final String YES = "Sim", NO = "Não";
         String correct = NO;
         if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1

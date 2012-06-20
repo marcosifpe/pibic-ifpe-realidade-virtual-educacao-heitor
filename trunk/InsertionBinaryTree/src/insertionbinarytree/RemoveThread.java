@@ -92,8 +92,9 @@ public class RemoveThread extends Thread {
                 tree.moveView(tree.viewX());
             }
             
-            tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
-            tree.updateInsertButton();
+            
+        } catch(NullPointerException ex){
+            
         } finally {
             tree.updateConnections(tree.root, 0);
             tree.moveView(tree.viewX());
@@ -102,6 +103,8 @@ public class RemoveThread extends Thread {
             }
             tree.getVars().setText("");
             tree.isRunning = false;
+            tree.clearHighlight(tree.textPane, InsertionBinaryTree.DELETE_CODE);
+            tree.updateInsertButton();
         }
     }
 }
