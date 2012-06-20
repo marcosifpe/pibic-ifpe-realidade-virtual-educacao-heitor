@@ -225,6 +225,7 @@ public class InsertionBinaryTree {
     public static final float DISTANCE = r * 2;
     public static final int H_MAX = 3;
     private boolean balanced;
+    private static final String CHANGE_ROOT = "Haverá mudança de raiz?";
 
     public InsertionBinaryTree(boolean balanced) {
         this.balanced = balanced;
@@ -1250,7 +1251,7 @@ public class InsertionBinaryTree {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Explicações");
         menu.setMnemonic(KeyEvent.VK_F1);
-        
+
         menuBar.add(menu);
 
         JMenuItem menuItem = new JMenuItem("Inserção", KeyEvent.VK_I);
@@ -1282,7 +1283,7 @@ public class InsertionBinaryTree {
 
         return menuBar;
     }
-    
+
     public void init(JFrame frame) {
         this.frame = frame;
         //Cor e background do texto não destacado
@@ -1350,7 +1351,10 @@ public class InsertionBinaryTree {
         //highlightsText(AVL_TITLE, AVL_CODE);
         highlightsText(BALANCE, AVL_CODE);
         setBalanceVars(node);
-        askAboutAVL(node, score);
+        askAboutAVL(node, score, "Haverá balanceamento?");
+        if (node == root) {
+            askAboutAVL(node, score, CHANGE_ROOT);
+        }
         highlightsText(BALANCE_IF_NULL, AVL_CODE);
         if (node == null) {
             highlightsText(BALANCE_NULL, AVL_CODE);
@@ -1392,8 +1396,8 @@ public class InsertionBinaryTree {
         return this.vars;
     }
 
-    void askAboutAVL(Node3D node, Score score) {
-        if(node == null){
+    void askAboutAVL(Node3D node, Score score, String ask) {
+        if (node == null) {
             return;
         }
         final String YES = "Sim", NO = "Não";
@@ -1407,8 +1411,22 @@ public class InsertionBinaryTree {
         boolean repeatQuestion = false;
         int cont = 0;
 
+
+
+        if (this.getHBinaryTree(node.getRight()) - this.getHBinaryTree(node.getLeft()) > 1
+                || this.getHBinaryTree(node.getLeft()) - this.getHBinaryTree(node.getRight()) > 1) {
+            if (node == this.root && ask == CHANGE_ROOT) {
+                correct = YES;
+            }else if(node != this.root && ask == CHANGE_ROOT){
+                correct = NO;
+            }
+        }
+
+
+
+
         do {
-            answer = JOptionPane.showOptionDialog(textPane, "Haverá balanceamento?", "Pergunta",
+            answer = JOptionPane.showOptionDialog(textPane, ask, "Pergunta",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
 
             //se a janela for fechada
