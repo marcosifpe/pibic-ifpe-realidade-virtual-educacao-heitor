@@ -1352,9 +1352,9 @@ public class InsertionBinaryTree {
         highlightsText(BALANCE, AVL_CODE);
         setBalanceVars(node);
         askAboutAVL(node, score, "Haverá balanceamento?");
-        if (node == root) {
+        
             askAboutAVL(node, score, CHANGE_ROOT);
-        }
+        
         highlightsText(BALANCE_IF_NULL, AVL_CODE);
         if (node == null) {
             highlightsText(BALANCE_NULL, AVL_CODE);
